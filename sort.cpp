@@ -7,7 +7,7 @@
 *  @FileName       : sort.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/16 16:00:12
-*  @Last Modified  : 2017/07/14 15:58:58
+*  @Last Modified  : 2017/07/16 22:13:55
 ********************************************************************************
 */
 
@@ -249,32 +249,33 @@ void QuickSort2(int a[], int low, int high, bool (*compare)(int, int))
 
 //------------------------------------------------------------------------------
 
-static void HeapAdjust(int a[], int n, int i)
+static void HeapAdjust(int heap[], int length, int i)
 {
-    int temp = a[i];
+    //j指向左叶子结点
     int j = 2*i + 1;
-    while(j < n - 1)
+    int temp = heap[i];
+    while(j < length)
     {
-        //寻找左右子节点中较大的节点。让j指向较大的节点。
-        if(a[j] < a[j+1])
+        //如果存在右叶子结点，且右叶子结点较大，则j指向右叶子结点
+        if(j < length - 1 && heap[j] < heap[j+1])
             ++j;
-        if(temp < a[j])
+        if(temp < heap[j])
         {
-            a[i] = a[j];
+            heap[i] = heap[j];
             i = j;
-            j = i*2 + 1;
+            j = 2*i + 1;
         }
         else
             break;
     }
-    a[i] = temp;
+    heap[i] = temp;
 }
 
-static void HeapCreate(int a[], int n)
+static void HeapCreate(int heap[], int length)
 {
-    //(n-2)/2为最后一个非叶子节点。
-    for(int i = (n - 2) / 2; i >= 0; --i)
-        HeapAdjust(a, n, i);
+    // length/2-1 为最后一个非叶子节点。
+    for(int i = length / 2 - 1; i >= 0; --i)
+        HeapAdjust(heap, length, i);
 }
 
 void HeapSort(int a[], int n)
@@ -408,8 +409,8 @@ int main(int argc, const char *argv[])
     // ShellSort2(array, SIZE, [](int a, int b)->bool{return a < b;}); 
     // QuickSort(array, 0, SIZE - 1, [](int a, int b)->int{return a - b;});
     // QuickSort2(array, 0, SIZE - 1, [](int a, int b)->bool{return a < b;});
-    MergeSort(array, SIZE);
-    // HeapSort(array, SIZE);
+    // MergeSort(array, SIZE);
+    HeapSort(array, SIZE);
     qsort(array1, SIZE, sizeof(int), [](const void*d1, const void*d2)->int{return *(int *)d1 - *(int *)d2;});
     // std::sort(array1, array1+SIZE, std::less<int>());
     clock_t end = clock(); 
