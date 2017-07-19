@@ -7,7 +7,7 @@
 *  @FileName       : sort.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/16 16:00:12
-*  @Last Modified  : 2017/07/16 22:13:55
+*  @Last Modified  : 2017/07/19 10:30:18
 ********************************************************************************
 */
 
@@ -221,9 +221,8 @@ static int Partition2(int a[], int low, int high, bool (*compare)(int, int))
     std::swap(a[high], a[middleIndex]);
 
     int small = low - 1;
-    for(int index = low; index < high; ++index)
+    for(int index = small + 1; index < high; ++index)
     {
-        // if(a[index] < a[high])
         if(compare(a[index], a[high]))
         {
             ++small;
@@ -259,14 +258,14 @@ static void HeapAdjust(int heap[], int length, int i)
         //如果存在右叶子结点，且右叶子结点较大，则j指向右叶子结点
         if(j < length - 1 && heap[j] < heap[j+1])
             ++j;
-        if(temp < heap[j])
+        if(temp >= heap[j])
+            break;
+        else
         {
             heap[i] = heap[j];
             i = j;
             j = 2*i + 1;
         }
-        else
-            break;
     }
     heap[i] = temp;
 }
@@ -387,7 +386,7 @@ void MergeSort(int a[], int n)
 
 //------------------------------------------------------------------------------
 
-#define SIZE 500
+#define SIZE 100
 int main(int argc, const char *argv[])
 {
     (void)argc;
@@ -398,7 +397,7 @@ int main(int argc, const char *argv[])
 
     srand(time(NULL));                                          //设置随机数种子
     for(unsigned i = 0; i < SIZE; ++i)
-        array1[i] = array[i] = rand();                                      //生成随机数
+        array[i] = array1[i] = rand();                                      //生成随机数
 
     clock_t begin = clock();
     // BubbleSort(array, SIZE); 
@@ -411,12 +410,12 @@ int main(int argc, const char *argv[])
     // QuickSort2(array, 0, SIZE - 1, [](int a, int b)->bool{return a < b;});
     // MergeSort(array, SIZE);
     HeapSort(array, SIZE);
-    qsort(array1, SIZE, sizeof(int), [](const void*d1, const void*d2)->int{return *(int *)d1 - *(int *)d2;});
-    // std::sort(array1, array1+SIZE, std::less<int>());
+    // qsort(array1, SIZE, sizeof(int), [](const void*d1, const void*d2)->int{return *(int *)d1 - *(int *)d2;});
+    std::sort(array1, array1+SIZE, std::less<int>());
     clock_t end = clock(); 
-
     printf("time ms:%ld\n", end - begin);
-    for(unsigned i = 0; i < 500/* sizeof(array)/sizeof(int) */ ; ++i)
+
+    for(unsigned i = 0; i < 100/* sizeof(array)/sizeof(int) */ ; ++i)
         printf("%d %d\n", array[i], array1[i]);
 
     delete []array;

@@ -7,7 +7,7 @@
 *  @FileName       : list.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/15 13:58:12
-*  @Last Modified  : 2017/07/11 15:58:24
+*  @Last Modified  : 2017/07/19 10:29:14
 ********************************************************************************
 */
 
@@ -248,16 +248,127 @@ void ListReversePrint(ListNode *head)
 */
 ListNode *ListFindMiddle(ListNode *head)
 {
-    ListNode *middle = head, *node = head;
-    while(node != NULL)
+    ListNode *fast = head, *slow = head;
+    while(fast != NULL && fast->next != NULL)
     {
-        if((node = node->next) != NULL)
-            if((node = node->next) != NULL)
-                middle = middle->next;
+        fast = fast->next->next;
+        slow = slow->next;
     }
-    return middle;
+    return slow;
 }
 
+/*
+********************************************************************************
+* Note : 判断一个链表是否有环 
+*        快指针每次走两步，慢指针每次走一步，如果快指针遇到NULL则链表无环。如果
+*        快指针遇到慢指针则链表有环。
+********************************************************************************
+*/
+int ListHasCircle(ListNode *head)
+{
+    ListNode *fast = head, *slow = head;
+    while(fast != NULL && fast->next != NULL)
+    {
+        fast = fast->next->next;
+        slow = slow->next;
+        if(fast == slow)
+            return 1;
+    }
+    return 0;
+}
+
+/*
+********************************************************************************
+* Note : 判断一个有环链表的环的长度
+*        从相遇点开始慢指针不动，快指针再走一圈，再次相遇时快指针走过的距离为环的长度。
+********************************************************************************
+*/
+int circlyLength(ListNode *head)
+{
+    ListNode *fast = head, *slow = head;
+    while(fast != NULL && fast->next != NULL)
+    {
+        fast = fast->next->next;
+        slow = slow->next;
+        if(fast == slow)
+            break;
+    }
+    //如果链表无环，则返回0
+    if(fast == NULL || fast->next == NULL)
+        return 0;
+    int length = 1;
+    //从相遇点开始，慢指针不动，快指针走一圈，直到碰到慢指针。
+    for(; fast->next != slow; fast = fast->next)
+        ++length;
+    return length;
+}
+
+/*
+********************************************************************************
+* Note : 寻找有环链表的环的入口点
+*        高指针A从快慢指针的碰撞点处一次走一个节点，与此同时指针B从链表头处开始，
+*        一次走一个节点，则A、B指针会在链表环入口处相遇。此时指针A可能走了几个圈，
+*        也可能没走完一个圈。
+********************************************************************************
+*/
+ListNode *findLoopPort(ListNode *head)
+{
+    ListNode *fast = head, *slow = head;
+    while(fast != NULL && fast->next != NULL)
+    {
+        fast = fast->next->next;
+        slow = slow->next;
+        if(fast == slow)
+            break;
+    }
+
+    if(fast == NULL || fast->next == NULL)
+        return NULL;
+
+    while(head != slow)
+    {
+        head = head->next;
+        slow = slow->next;
+    }
+    return head;
+}
+
+/*
+********************************************************************************
+* Note : 求一个带环链表的全长 
+********************************************************************************
+*/
+int loopListLength(ListNode *head)
+{
+    ListNode *fast = head, *slow = head;
+    int len = 0;
+    while(fast != NULL && fast->next != NULL)
+    {
+        ++len;
+        fast = fast->next->next;
+        slow = slow->next;
+        if(fast == slow)
+            break;
+    }
+
+    //返回无环链表的长度
+    if(fast == NULL || fast->next == NULL)
+        return len;
+
+    //求环的长度：从相遇点开始，慢指针不动，快指针走一圈，直到碰到慢指针。
+    len = 1;
+    for(; fast->next != slow; fast = fast->next)
+        ++len;
+
+    //加上链表头到环入口的长度
+    while(head != slow)
+    {
+        ++len;
+        head = head->next;
+        slow = slow->next;
+    }
+    return len;
+}
 
 /*
 ********************************************************************************

@@ -7,7 +7,7 @@
 *  @FileName       : GetLeastNumber.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/14 15:43:22
-*  @Last Modified  : 2017/07/16 21:32:15
+*  @Last Modified  : 2017/07/19 10:29:24
 ********************************************************************************
 */
 
@@ -109,27 +109,28 @@ void GetLeastNumber(int a[], int n, PriorityQueue &output, int k)
 //方法四，由于优先队列使用的是堆算法，所以可以自己写堆算法，实现一样的功能
 void heapAdjust(int heap[], int size, int i)
 {
-    //j指向左叶子结点
-    int j = 2*i + 1;
-    while(j < size)
+    // j = 2*i + 1 使j指向左叶子结点
+    for(int j = 2*i + 1; j < size; j = 2*i + 1)
     {
         //如果存在右叶子结点，且右叶子结点较大，则j指向右叶子结点
         if(j < size - 1 && heap[j] < heap[j+1])
             ++j;
         //把最大值放到堆顶
-        if(heap[i] < heap[j])
+        if(heap[i] >= heap[j])
+            break;
+        else
         {
             int temp = heap[i]; heap[i] = heap[j]; heap[j] = temp;
             i = j;
-            j = 2*i + 1;
         }
-        else
-            break;
     }
 }
 
 void GetLeastNumber_h(int a[], int n, int minTable[], int k)
 {
+    if(a == NULL || minTable == NULL || k < 1 || n < k )
+        return;
+
     for(int i = 0; i < k; ++i)
         minTable[i] = a[i];
     //在minTable中创建最大堆

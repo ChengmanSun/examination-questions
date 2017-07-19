@@ -1,7 +1,4 @@
-#忽略.gitignore本身
 .gitignore
-#忽略vim历史文件
 *~
-#忽略a.exe或者a.out文件
-*exe
-*out
+*.exe
+*.out
