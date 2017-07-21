@@ -7,7 +7,7 @@
 *  @FileName       : tree.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/21 12:59:10
-*  @Last Modified  : 2017/07/15 15:28:37
+*  @Last Modified  : 2017/07/21 14:34:34
 ********************************************************************************
 */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <deque>
 #include <vector>
+#include <stack>
 
 typedef struct BinaryTreeNode
 {
@@ -238,4 +239,96 @@ bool isBalance(TreeNode *root, int *deepth)
             return false;
     }
     return false;
+}
+
+//前序遍历，递归
+void preorderTraversal(TreeNode *root)
+{
+    if(root == NULL)
+        return;
+    printf("%d\n", root->data);
+    preorderTraversal(root->left);
+    preorderTraversal(root->right);
+}
+
+//中序遍历，递归
+void inorderTraversal(TreeNode *root)
+{
+    if(root == NULL)
+        return;
+    preorderTraversal(root->left);
+    printf("%d\n", root->data);
+    preorderTraversal(root->right);
+}
+
+//后序遍历，递归
+void postorderTraversal(TreeNode *root)
+{
+    if(root == NULL)
+        return;
+    postorderTraversal(root->left);
+    postorderTraversal(root->right);
+    printf("%d\n", root->data);
+}
+
+//前序遍历，非递归
+void preorderTraversal_nonrecursive(TreeNode *root)
+{
+    if(root == NULL)
+        return;
+    std::stack<TreeNode *> stk;
+    stk.push(root);
+    while(!stk.empty())
+    {
+        TreeNode *temp = stk.top();
+        stk.pop();
+        printf("%d\n", temp->data);
+        if(temp->right != NULL)
+            stk.push(temp->right);
+        if(temp->left != NULL)
+            stk.push(temp->left);
+    }
+}
+
+//中序遍历，非递归
+void inorderTravasal_nonrecursive(TreeNode *root)
+{
+    if(root == NULL)
+        return;
+    std::stack<TreeNode *> stk;
+    stk.push(root);
+    while(!stk.empty())
+    {
+        while(stk.top()->left != NULL)
+            stk.push(stk.top()->left);
+        TreeNode *temp = stk.top();
+        stk.pop();
+        printf("%d\n", temp->data);
+        if(temp->right != NULL)
+            stk.push(temp->right);
+    }
+}
+
+//后序遍历，非递归
+void postorderTraversal_nonrecursive(TreeNode *root)
+{
+    if(root == NULL)
+        return;
+    std::stack<TreeNode *> stk;
+    stk.push(root);
+    TreeNode *preVisit = NULL;
+    while(!stk.empty())
+    {
+        TreeNode *top = stk.top();
+        for(; top->left != preVisit && top->right != preVisit; top = stk.top())
+        {
+            if(top->right != NULL)
+                stk.push(top->right);
+            if(top->left != NULL)
+                stk.push(top->left);
+        }
+        printf("%d\n", top->data);
+        preVisit = top;
+        stk.pop();
+    }
 }
