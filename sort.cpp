@@ -7,7 +7,7 @@
 *  @FileName       : sort.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/16 16:00:12
-*  @Last Modified  : 2017/07/19 10:30:18
+*  @Last Modified  : 2017/07/23 00:05:07
 ********************************************************************************
 */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <stack>
 #include <algorithm>
 #include <functional>
 
@@ -201,6 +202,7 @@ static int Partition(int a[], int low, int high, int (*compare)(int, int))
     return low;
 }
 
+//快速排序递归法
 void QuickSort(int a[], int low, int high, int (*compare)(int, int))
 {
     if(a == NULL || low >= high || compare == NULL)
@@ -211,6 +213,25 @@ void QuickSort(int a[], int low, int high, int (*compare)(int, int))
         QuickSort(a, low, pivotIndex - 1, compare);
     if(high > pivotIndex + 1)
         QuickSort(a, pivotIndex + 1, high, compare);
+}
+
+//快速排序非递归法
+void QuickSort(int a[], int n, int (*compare)(int, int))
+{
+    if(a == NULL || n < 2)
+        return;
+    std::stack<std::pair<int, int> > stk;
+    stk.push(std::pair<int, int>(0, n - 1));
+    while(!stk.empty())
+    {
+        std::pair<int, int> border = stk.top();
+        stk.pop();
+        int pivot = Partition(a, border.first, border.second, compare);
+        if(border.first < pivot - 1)
+            stk.push(std::pair<int, int>(border.first, pivot - 1));
+        if(border.second > pivot + 1)
+            stk.push(std::pair<int, int>(pivot + 1, border.second));
+    }
 }
 
 //Partition第二种写法，这种写法的比较函数返回值只有true和false
@@ -386,7 +407,7 @@ void MergeSort(int a[], int n)
 
 //------------------------------------------------------------------------------
 
-#define SIZE 100
+#define SIZE 500000
 int main(int argc, const char *argv[])
 {
     (void)argc;
@@ -407,9 +428,10 @@ int main(int argc, const char *argv[])
     // ShellSort(array, SIZE, [](int a, int b)->bool{return a < b;}); 
     // ShellSort2(array, SIZE, [](int a, int b)->bool{return a < b;}); 
     // QuickSort(array, 0, SIZE - 1, [](int a, int b)->int{return a - b;});
+    QuickSort(array, SIZE, [](int a, int b)->int{return a - b;});
     // QuickSort2(array, 0, SIZE - 1, [](int a, int b)->bool{return a < b;});
     // MergeSort(array, SIZE);
-    HeapSort(array, SIZE);
+    // HeapSort(array, SIZE);
     // qsort(array1, SIZE, sizeof(int), [](const void*d1, const void*d2)->int{return *(int *)d1 - *(int *)d2;});
     std::sort(array1, array1+SIZE, std::less<int>());
     clock_t end = clock(); 
