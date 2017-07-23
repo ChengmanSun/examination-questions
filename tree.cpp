@@ -7,7 +7,7 @@
 *  @FileName       : tree.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/21 12:59:10
-*  @Last Modified  : 2017/07/21 14:34:34
+*  @Last Modified  : 2017/07/23 23:54:11
 ********************************************************************************
 */
 
@@ -16,6 +16,7 @@
 #include <deque>
 #include <vector>
 #include <stack>
+#include <map>
 
 typedef struct BinaryTreeNode
 {
@@ -330,5 +331,90 @@ void postorderTraversal_nonrecursive(TreeNode *root)
         printf("%d\n", top->data);
         preVisit = top;
         stk.pop();
+    }
+}
+
+//给定二叉搜索树的两个节点，求这两个节点的最小公共祖先。
+//解析：这两个节点的最小公共祖先的值，大于这两个节点中的较小值，小于较大值。
+TreeNode *leastGrandfather(TreeNode *root, TreeNode *p, TreeNode *q)
+{
+    if(root == NULL || p == NULL || q == NULL) return NULL;
+    if(root->data < p->data && root->data < q->data)
+        leastGrandfather(root->right, p, q);
+    else if(root->data > p->data && root->data > q->data)
+        leastGrandfather(root->left, p, q);
+    else
+        return root;
+}
+
+//给定二叉树的两个节点，求两个节点的最小公共祖先。每个节点除了有左右子节点外还有
+//一个指向父节点的指针。
+typedef struct TreeNode_ {
+    int data;
+    struct TreeNode_ *parent;
+    struct TreeNode_ *left;
+    struct TreeNode_ *right;
+} TreeNode_;
+TreeNode_ *leastGrandfather_1(TreeNode_ *root, TreeNode_ *p, TreeNode_ *q)
+{
+    if(root == NULL || p == NULL || q == NULL) return NULL;
+    int plen = 0, qlen = 0;
+    for(TreeNode_ *temp = p; temp != root; temp = temp->parent)
+        ++plen;
+    for(TreeNode_ *temp = q; temp != root; temp = temp->parent)
+        ++qlen;
+    while(plen > qlen)
+    {
+        p = p->parent;
+        --plen;
+    }
+    while(qlen > plen)
+    {
+        q = q->parent;
+        --qlen;
+    }
+    while(p != q)
+    {
+        p = p->parent;
+        q = q->parent;
+    }
+    return p;
+}
+
+//给定一棵普通二叉树的两个节点，求它们的最小公共祖先。
+void nodeMapParent(TreeNode *root, std::map<TreeNode*, TreeNode *> &mp)
+{
+    if(root == NULL) return;
+    mp[root->left] = root;
+    mp[root->right] = root;
+    nodeMapParent(root->left, mp);
+    nodeMapParent(root->right, mp);
+}
+
+TreeNode *findGrandfather(TreeNode *root, TreeNode *p, TreeNode *q)
+{
+    if(root == NULL) return NULL;
+    std::map<TreeNode *, TreeNode *> mp;
+    nodeMapParent(root, mp);
+    int plen = 0, qlen = 0;
+    for(TreeNode *temp = p; mp.find(temp) != mp.end(); temp = mp.find(temp)->second)
+        ++plen;
+    for(TreeNode *temp = q; mp.find(temp) != mp.end(); temp = mp.find(temp)->second)
+        ++qlen;
+
+    while(plen > qlen)
+    {
+        p = mp.find(p)->second;
+        --plen;
+    }
+    while(plen < qlen)
+    {
+        q = mp.find(q)->second;
+        --qlen;
+    }
+    while(p != q)
+    {
+        p = mp.find(p)->second;
+        q = mp.find(q)->second;
     }
 }
