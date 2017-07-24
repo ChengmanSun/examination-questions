@@ -7,7 +7,7 @@
 *  @FileName       : tree.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/21 12:59:10
-*  @Last Modified  : 2017/07/23 23:54:11
+*  @Last Modified  : 2017/07/24 15:16:03
 ********************************************************************************
 */
 
@@ -61,21 +61,21 @@ bool HasSubTree(TreeNode *root1, TreeNode *root2)
 
 //------------------------------------------------------------------------------
 
-void MirrorTree(TreeNode *root)
+void mirrorTree(TreeNode *root)
 {
     if(root == NULL)
         return;
     TreeNode *temp = root->left;
     root->left = root->right;
     root->right = temp;
-    MirrorTree(root->left);
-    MirrorTree(root->right);
+    mirrorTree(root->left);
+    mirrorTree(root->right);
 }
 
 //------------------------------------------------------------------------------
 
 //从上往下打印二叉树
-void PrintTreeFromTopToBottom(TreeNode *root)
+void PrintTopToBottom(TreeNode *root)
 {
     if(root == NULL)
         return;
@@ -83,11 +83,13 @@ void PrintTreeFromTopToBottom(TreeNode *root)
     dq.push_back(root);
     while(!dq.empty())
     {
-        TreeNode *front = dq.front();
+        TreeNode *node = dq.front();
         dq.pop_front();
-        printf("%d ", front->data);
-        dq.push_back(front->left);
-        dq.push_back(front->right);
+        printf("%d ", node->data);
+        if(node->left != NULL)
+            dq.push_back(node->left);
+        if(node->right != NULL)
+            dq.push_back(node->right);
     }
 }
 
@@ -135,35 +137,35 @@ bool VerifySequenceOfBST(int sequence[], int length)
 //输入一棵二叉树和一个整数，打印出二叉树中结点的值为输入整数的所有路径。从树的根
 //结点往下一直到叶子结点所经过的结点形成一条路径。
 
-void FindPath(TreeNode *node, std::vector<TreeNode *> &path, int value, int &sum)
+void findPath(TreeNode *node, std::vector<TreeNode *> &path, int currsum, int sum)
 {
     if(node == NULL)
         return;
-    sum += node->data;
+    currsum += node->data;
     path.push_back(node);
     //判断当前节点是否是叶子节点
     bool isLeaf = node->left == NULL && node->right == NULL;
-    if(sum == value && isLeaf)
+    if(currsum == sum && isLeaf)
     {
         for(std::vector<TreeNode *>::iterator iter = path.begin(); iter != path.end(); ++iter)
             printf("%d ", (*iter)->data);
         printf("\n");
     }
     //如果不是叶子结节点则遍历它的子结点
-    FindPath(node->left, path, value, sum);
-    FindPath(node->right, path, value, sum);
+    findPath(node->left, path, currsum, sum);
+    findPath(node->right, path, currsum, sum);
     //返回到父结点之前，在路径上删除当前结点，并减去当前值。
-    sum -= node->data;
+    currsum -= node->data;
     path.pop_back();
 }
 
-void FindTreePath(TreeNode *root, int sum)
+void findTreePath(TreeNode *root, int sum)
 {
     if(root == NULL)
         return;
     std::vector<TreeNode *> path;
-    int value = 0;
-    FindPath(root, path, value, sum);
+    int currsum = 0;
+    findPath(root, path, currsum, sum);
 }
 
 //------------------------------------------------------------------------------
@@ -196,25 +198,25 @@ TreeNode *TreeConvertToDoubleList(TreeNode *root)
 //------------------------------------------------------------------------------
 
 //求树的深度
-int TreeDeepth(TreeNode *root)
+int treeDeepth(TreeNode *root)
 {
     if(root == NULL)
         return 0;
-    int left = TreeDeepth(root->left);
-    int right = TreeDeepth(root->right);
+    int left = treeDeepth(root->left);
+    int right = treeDeepth(root->right);
     return left > right ? left + 1 : right + 1;
 }
 
 //------------------------------------------------------------------------------
 
 //求树是否平衡
-//法一，多次遍历丗一个节点，效率差。
+//法一，多次遍历同一个节点，效率差。
 bool isBalance(TreeNode *root)
 {
     if(root == NULL)
         return true;
-    int left = TreeDeepth(root->left);
-    int right = TreeDeepth(root->right);
+    int left = treeDeepth(root->left);
+    int right = treeDeepth(root->right);
     if(abs(left - right) > 1)
         return false;
     return isBalance(root->left) && isBalance(root->right);
@@ -242,6 +244,8 @@ bool isBalance(TreeNode *root, int *deepth)
     return false;
 }
 
+//------------------------------------------------------------------------------
+
 //前序遍历，递归
 void preorderTraversal(TreeNode *root)
 {
@@ -257,9 +261,9 @@ void inorderTraversal(TreeNode *root)
 {
     if(root == NULL)
         return;
-    preorderTraversal(root->left);
+    inorderTraversal(root->left);
     printf("%d\n", root->data);
-    preorderTraversal(root->right);
+    inorderTraversal(root->right);
 }
 
 //后序遍历，递归
@@ -271,6 +275,8 @@ void postorderTraversal(TreeNode *root)
     postorderTraversal(root->right);
     printf("%d\n", root->data);
 }
+
+//------------------------------------------------------------------------------
 
 //前序遍历，非递归
 void preorderTraversal_nonrecursive(TreeNode *root)
@@ -294,19 +300,23 @@ void preorderTraversal_nonrecursive(TreeNode *root)
 //中序遍历，非递归
 void inorderTravasal_nonrecursive(TreeNode *root)
 {
-    if(root == NULL)
-        return;
     std::stack<TreeNode *> stk;
-    stk.push(root);
-    while(!stk.empty())
+    TreeNode *p = root;
+    while(p != NULL || !stk.empty())
     {
-        while(stk.top()->left != NULL)
-            stk.push(stk.top()->left);
-        TreeNode *temp = stk.top();
-        stk.pop();
-        printf("%d\n", temp->data);
-        if(temp->right != NULL)
-            stk.push(temp->right);
+        while(p != NULL)
+        {
+            stk.push(p);
+            p = p->left;
+        }
+
+        if(!stk.empty())
+        {
+            p = stk.top();
+            stk.pop();
+            printf("%d\n", p->data);
+            p = p->right;
+        }
     }
 }
 
@@ -317,32 +327,37 @@ void postorderTraversal_nonrecursive(TreeNode *root)
         return;
     std::stack<TreeNode *> stk;
     stk.push(root);
-    TreeNode *preVisit = NULL;
+    TreeNode *prev = NULL;
     while(!stk.empty())
     {
-        TreeNode *top = stk.top();
-        for(; top->left != preVisit && top->right != preVisit; top = stk.top())
+        TreeNode *curr = stk.top();
+        if((curr->left == NULL && curr->right == NULL) || (prev != NULL && (curr->left == prev || curr->right == prev)))
         {
-            if(top->right != NULL)
-                stk.push(top->right);
-            if(top->left != NULL)
-                stk.push(top->left);
+            printf("%d\n", curr->data);
+            prev = curr;
+            stk.pop();
         }
-        printf("%d\n", top->data);
-        preVisit = top;
-        stk.pop();
+        else
+        {
+            if(curr->right != NULL)
+                stk.push(curr->right);
+            if(curr->left != NULL)
+                stk.push(curr->left);
+        }
     }
 }
 
+//------------------------------------------------------------------------------
+
 //给定二叉搜索树的两个节点，求这两个节点的最小公共祖先。
 //解析：这两个节点的最小公共祖先的值，大于这两个节点中的较小值，小于较大值。
-TreeNode *leastGrandfather(TreeNode *root, TreeNode *p, TreeNode *q)
+TreeNode *leastforefather(TreeNode *root, TreeNode *p, TreeNode *q)
 {
     if(root == NULL || p == NULL || q == NULL) return NULL;
     if(root->data < p->data && root->data < q->data)
-        leastGrandfather(root->right, p, q);
+        leastforefather(root->right, p, q);
     else if(root->data > p->data && root->data > q->data)
-        leastGrandfather(root->left, p, q);
+        leastforefather(root->left, p, q);
     else
         return root;
 }
@@ -355,7 +370,7 @@ typedef struct TreeNode_ {
     struct TreeNode_ *left;
     struct TreeNode_ *right;
 } TreeNode_;
-TreeNode_ *leastGrandfather_1(TreeNode_ *root, TreeNode_ *p, TreeNode_ *q)
+TreeNode_ *leastforefather_1(TreeNode_ *root, TreeNode_ *p, TreeNode_ *q)
 {
     if(root == NULL || p == NULL || q == NULL) return NULL;
     int plen = 0, qlen = 0;
@@ -381,6 +396,8 @@ TreeNode_ *leastGrandfather_1(TreeNode_ *root, TreeNode_ *p, TreeNode_ *q)
     return p;
 }
 
+//------------------------------------------------------------------------------
+
 //给定一棵普通二叉树的两个节点，求它们的最小公共祖先。
 void nodeMapParent(TreeNode *root, std::map<TreeNode*, TreeNode *> &mp)
 {
@@ -391,7 +408,7 @@ void nodeMapParent(TreeNode *root, std::map<TreeNode*, TreeNode *> &mp)
     nodeMapParent(root->right, mp);
 }
 
-TreeNode *findGrandfather(TreeNode *root, TreeNode *p, TreeNode *q)
+TreeNode *findforefather(TreeNode *root, TreeNode *p, TreeNode *q)
 {
     if(root == NULL) return NULL;
     std::map<TreeNode *, TreeNode *> mp;
@@ -417,4 +434,100 @@ TreeNode *findGrandfather(TreeNode *root, TreeNode *p, TreeNode *q)
         p = mp.find(p)->second;
         q = mp.find(q)->second;
     }
+    return p;
+}
+
+//------------------------------------------------------------------------------
+
+//给出二叉树的前序遍历和中序遍历，请重建二叉树
+int g_InvalidInput = 0;
+TreeNode *constructCore(int *preorderStart, int *preorderEnd, int *inorderStart, int *inorderEnd)
+{
+    TreeNode *node = (TreeNode *)malloc(sizeof(TreeNode)); 
+    node->data = *preorderStart;
+    node->left = node->right = NULL;
+
+    if(preorderStart == preorderEnd)
+    {
+        if(inorderStart == inorderEnd && *preorderStart == *inorderStart)
+            return node;
+        else
+        {
+            free(node);
+            g_InvalidInput = 1;
+            return NULL;
+        }
+    }
+
+    int *inorderRoot = inorderStart;
+    while(inorderRoot <= inorderEnd && *inorderRoot != *preorderStart)
+        ++inorderRoot;
+    if(inorderRoot > inorderEnd)
+    {
+        free(node);
+        g_InvalidInput = 1;
+        return NULL;
+    }
+
+    int leftLen = inorderRoot - inorderStart;
+    int rightLen = inorderEnd - inorderRoot;
+    if(leftLen > 0)
+        node->left = constructCore(preorderStart + 1, preorderStart + leftLen,
+                                    inorderStart, inorderRoot - 1);
+    if(rightLen > 0)
+        node->right = constructCore(preorderEnd - rightLen + 1, preorderEnd,
+                                    inorderRoot + 1, inorderEnd);
+
+    return node;
+}
+void distroyTree(TreeNode *root)
+{
+    if(root == NULL)
+        return;
+    distroyTree(root->left);
+    distroyTree(root->right);
+    free(root);
+}
+TreeNode *constructTree(int preorder[], int inorder[], int len)
+{
+    if(preorder == NULL || inorder == NULL || len <= 0)
+    {
+        g_InvalidInput = 1;
+        return NULL;
+    }
+    g_InvalidInput = 0;
+    TreeNode *root = constructCore(preorder, preorder + len - 1,
+                            inorder, inorder + len - 1); 
+    if(g_InvalidInput)
+    {
+        distroyTree(root);
+        root = NULL;
+    }
+    return root;
+}
+//------------------------------------------------------------------------------
+
+int main(int argc, const char *argv[])
+{
+    int preorder[] = {1, 2, 4, 7, 3, 5, 6, 8};
+    int inorder[]  = {4, 7, 2, 1, 5, 3, 8, 6};
+    TreeNode *root = constructTree(preorder, inorder, sizeof(preorder)/sizeof(preorder[0]));
+    // preorderTraversal(root);
+    // inorderTraversal(root);
+    // postorderTraversal(root);
+    // preorderTraversal_nonrecursive(root);
+    // inorderTravasal_nonrecursive(root);
+    // postorderTraversal_nonrecursive(root);
+    // findTreePath(root, 18);
+    // mirrorTree(root);
+    // PrintTopToBottom(root);
+    int deepth = treeDeepth(root);
+    printf("deepth:%d\n", deepth);
+
+    TreeNode *p = root->right;
+    TreeNode *q = p->right;
+    p = p->left;
+    TreeNode *forefather = findforefather(root, p, q);
+    printf("%d\n", forefather->data);
+    return 0;
 }
