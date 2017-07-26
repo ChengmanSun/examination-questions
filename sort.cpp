@@ -7,7 +7,7 @@
 *  @FileName       : sort.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/16 16:00:12
-*  @Last Modified  : 2017/07/23 00:05:07
+*  @Last Modified  : 2017/07/26 10:28:43
 ********************************************************************************
 */
 
@@ -125,7 +125,7 @@ static void ShellInsert(int a[], int n, int k, bool (*compare)(int, int))
         {
             int temp = a[i];
             int j = i-k;
-            for(; j >= 0 && a[j+k] < a[j]; j -= k)
+            for(; j >= 0 && compare(a[j+k], a[j]); j -= k)
                 a[j+k] = a[j];
             a[j+k] = temp;
         }

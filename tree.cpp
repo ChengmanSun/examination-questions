@@ -7,7 +7,7 @@
 *  @FileName       : tree.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/21 12:59:10
-*  @Last Modified  : 2017/07/24 15:16:03
+*  @Last Modified  : 2017/07/26 10:51:47
 ********************************************************************************
 */
 
@@ -225,23 +225,17 @@ bool isBalance(TreeNode *root)
 //法二，不需要多次遍历同一个节点，效率高。
 bool isBalance(TreeNode *root, int *deepth)
 {
+    if(deepth == NULL ) return false;
     if(root == NULL)
     {
         *deepth = 0;
         return true;
     }
     int leftDeepth, rightDeepth;
-    if(isBalance(root->left, &leftDeepth) && isBalance(root->right, &rightDeepth))
-    {
-        if(abs(leftDeepth - rightDeepth) <= 1)
-        {
-            *deepth = leftDeepth > rightDeepth ? leftDeepth + 1 : rightDeepth + 1;
-            return true;
-        }
-        else
-            return false;
-    }
-    return false;
+    bool leftBalance = isBalance(root->left, &leftDeepth);
+    bool rightBalance = isBalance(root->right, &rightDeepth);
+    *deepth = leftDeepth > rightDeepth ? leftDeepth + 1 : rightDeepth + 1;
+    return leftBalance && rightBalance && abs(leftDeepth - rightDeepth) <= 1;
 }
 
 //------------------------------------------------------------------------------
