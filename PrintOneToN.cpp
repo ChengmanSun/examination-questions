@@ -7,7 +7,7 @@
 *  @FileName       : PrintToMaxOfDigits.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/12 19:19:06
-*  @Last Modified  : 2017/07/17 18:32:11
+*  @Last Modified  : 2017/08/07 00:59:27
 ********************************************************************************
 */
 
@@ -16,23 +16,17 @@
 
 //打印1到n的所有数字。n可能很大，超过long long的最大值。
 
-void printNumber(int *array, int n)
-{
-    int *p = array;
-    while(*p == 0 && n > 0)
-    {
-        ++p;
-        --n;
-    }
-    while(n-- > 0)
-        printf("%d", *p++);
-    printf("\n");
-}
-
 void recursive(int array[], int n, int index)
 {
     if(index == n)
-        printNumber(array, n);
+    {
+        int i = 0;
+        while(i < n && array[i] == 0)
+            ++i;
+        for(; i < n; ++i)
+            printf("%d", array[i]);
+        printf("\n");
+    }
     else
     {
         for(int i = 0; i < 10; ++i)

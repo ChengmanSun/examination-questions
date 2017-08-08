@@ -7,7 +7,7 @@
 *  @FileName       : sort.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/16 16:00:12
-*  @Last Modified  : 2017/07/26 10:28:43
+*  @Last Modified  : 2017/08/08 14:08:39
 ********************************************************************************
 */
 
@@ -176,11 +176,12 @@ void ShellSort2(int a[], int n, bool (*compare)(int, int))
 //Partition第一种写法，这种写法的比较函数的返回值为 大于0，小于0，等于0 这三种值。
 static int Partition(int a[], int low, int high, int (*compare)(int, int))
 {
-    //选中间的值作为基准数值，以防止如果数组已经有序时的最坏情况。
     // int pivot = a[low];  //直接先第一个数作为基准数值，但是当数组基本有序时将会是最坏情况。
-    int middleIndex = low + (high - low) / 2;
-    int pivot = a[middleIndex];
-    a[middleIndex] = a[low];
+    //选随机位置上的值作为基准数值，以防止如果数组已经有序时的最坏情况。
+    srand(time(NULL));
+    int i = low + rand() % (high - low);
+    int pivot = a[i];
+    a[i] = a[low];
     while(low < high)
     {
         while(low < high && compare(a[high], pivot) >= 0)
@@ -238,9 +239,9 @@ void QuickSort(int a[], int n, int (*compare)(int, int))
 static int Partition2(int a[], int low, int high, bool (*compare)(int, int))
 {
     //选中间的值作为基准值，以防止如果数组已经有序时的最坏情况。
-    int middleIndex = low + (high - low) / 2;
-    std::swap(a[high], a[middleIndex]);
-
+    srand(time(NULL));
+    int i = low + rand() % (high - low);
+    std::swap(a[high], a[i]);
     int small = low - 1;
     for(int index = small + 1; index < high; ++index)
     {
@@ -433,7 +434,7 @@ int main(int argc, const char *argv[])
     // MergeSort(array, SIZE);
     // HeapSort(array, SIZE);
     // qsort(array1, SIZE, sizeof(int), [](const void*d1, const void*d2)->int{return *(int *)d1 - *(int *)d2;});
-    std::sort(array1, array1+SIZE, std::less<int>());
+    // std::sort(array1, array1+SIZE, std::less<int>());
     clock_t end = clock(); 
     printf("time ms:%ld\n", end - begin);
 

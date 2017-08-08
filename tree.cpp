@@ -7,7 +7,7 @@
 *  @FileName       : tree.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/21 12:59:10
-*  @Last Modified  : 2017/07/26 10:51:47
+*  @Last Modified  : 2017/08/07 14:48:55
 ********************************************************************************
 */
 
@@ -325,19 +325,17 @@ void postorderTraversal_nonrecursive(TreeNode *root)
     while(!stk.empty())
     {
         TreeNode *curr = stk.top();
-        if((curr->left == NULL && curr->right == NULL) || (prev != NULL && (curr->left == prev || curr->right == prev)))
+        if((curr->left == NULL && curr->right == NULL) ||
+            (prev != NULL && (curr->left == prev || curr->right == prev)))
         {
             printf("%d\n", curr->data);
             prev = curr;
             stk.pop();
         }
-        else
-        {
-            if(curr->right != NULL)
-                stk.push(curr->right);
-            if(curr->left != NULL)
-                stk.push(curr->left);
-        }
+        else if(curr->right != NULL)
+            stk.push(curr->right);
+        else if(curr->left != NULL)
+            stk.push(curr->left);
     }
 }
 
@@ -345,42 +343,48 @@ void postorderTraversal_nonrecursive(TreeNode *root)
 
 //给定二叉搜索树的两个节点，求这两个节点的最小公共祖先。
 //解析：这两个节点的最小公共祖先的值，大于这两个节点中的较小值，小于较大值。
-TreeNode *leastforefather(TreeNode *root, TreeNode *p, TreeNode *q)
+TreeNode *commonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 {
     if(root == NULL || p == NULL || q == NULL) return NULL;
     if(root->data < p->data && root->data < q->data)
-        leastforefather(root->right, p, q);
+        commonAncestor(root->right, p, q);
     else if(root->data > p->data && root->data > q->data)
-        leastforefather(root->left, p, q);
+        commonAncestor(root->left, p, q);
     else
         return root;
 }
 
 //给定二叉树的两个节点，求两个节点的最小公共祖先。每个节点除了有左右子节点外还有
 //一个指向父节点的指针。
-typedef struct TreeNode_ {
+
+typedef struct Node {
     int data;
-    struct TreeNode_ *parent;
-    struct TreeNode_ *left;
-    struct TreeNode_ *right;
-} TreeNode_;
-TreeNode_ *leastforefather_1(TreeNode_ *root, TreeNode_ *p, TreeNode_ *q)
+    struct Node *parent;
+    struct Node *left;
+    struct Node *right;
+} Node;
+
+Node *commonAncestor(Node *root, Node *p, Node *q)
 {
     if(root == NULL || p == NULL || q == NULL) return NULL;
-    int plen = 0, qlen = 0;
-    for(TreeNode_ *temp = p; temp != root; temp = temp->parent)
-        ++plen;
-    for(TreeNode_ *temp = q; temp != root; temp = temp->parent)
-        ++qlen;
-    while(plen > qlen)
+    int p_len = 0, q_len = 0;
+    Node *p_tmp = p, *q_tmp = q;
+    for(; p_tmp != root && p_tmp != NULL; p_tmp = p_tmp->parent)
+        ++p_len;
+    for(; q_tmp != root && p_tmp != NULL; q_tmp = q_tmp->parent)
+        ++q_len;
+    //检查p和q是否都在二叉树中
+    if(p_tmp == NULL || q_tmp == NULL)
+        return NULL;
+    while(p_len > q_len)
     {
         p = p->parent;
-        --plen;
+        --p_len;
     }
-    while(qlen > plen)
+    while(q_len > p_len)
     {
         q = q->parent;
-        --qlen;
+        --q_len;
     }
     while(p != q)
     {
@@ -402,26 +406,27 @@ void nodeMapParent(TreeNode *root, std::map<TreeNode*, TreeNode *> &mp)
     nodeMapParent(root->right, mp);
 }
 
-TreeNode *findforefather(TreeNode *root, TreeNode *p, TreeNode *q)
+TreeNode *_commonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 {
     if(root == NULL) return NULL;
     std::map<TreeNode *, TreeNode *> mp;
     nodeMapParent(root, mp);
-    int plen = 0, qlen = 0;
-    for(TreeNode *temp = p; mp.find(temp) != mp.end(); temp = mp.find(temp)->second)
-        ++plen;
-    for(TreeNode *temp = q; mp.find(temp) != mp.end(); temp = mp.find(temp)->second)
-        ++qlen;
+    int p_len = 0, q_len = 0;
+    TreeNode *p_tmp = NULL, *q_tmp = NULL;
+    for(p_tmp = p; mp.find(p_tmp) != mp.end(); p_tmp = mp.find(p_tmp)->second)
+        ++p_len;
+    for(q_tmp = q; mp.find(q_tmp) != mp.end(); q_tmp = mp.find(q_tmp)->second)
+        ++q_len;
 
-    while(plen > qlen)
+    while(p_len > q_len)
     {
         p = mp.find(p)->second;
-        --plen;
+        --p_len;
     }
-    while(plen < qlen)
+    while(p_len < q_len)
     {
         q = mp.find(q)->second;
-        --qlen;
+        --q_len;
     }
     while(p != q)
     {
@@ -458,18 +463,17 @@ TreeNode *constructCore(int *preorderStart, int *preorderEnd, int *inorderStart,
         ++inorderRoot;
     if(inorderRoot > inorderEnd)
     {
-        free(node);
         g_InvalidInput = 1;
-        return NULL;
+        return node;
     }
 
-    int leftLen = inorderRoot - inorderStart;
-    int rightLen = inorderEnd - inorderRoot;
-    if(leftLen > 0)
-        node->left = constructCore(preorderStart + 1, preorderStart + leftLen,
+    int leftSubtreeSize = inorderRoot - inorderStart;
+    int rightSubtreeSize = inorderEnd - inorderRoot;
+    if(leftSubtreeSize > 0)
+        node->left = constructCore(preorderStart + 1, preorderStart + leftSubtreeSize,
                                     inorderStart, inorderRoot - 1);
-    if(rightLen > 0)
-        node->right = constructCore(preorderEnd - rightLen + 1, preorderEnd,
+    if(rightSubtreeSize > 0)
+        node->right = constructCore(preorderEnd - rightSubtreeSize + 1, preorderEnd,
                                     inorderRoot + 1, inorderEnd);
 
     return node;
@@ -499,6 +503,60 @@ TreeNode *constructTree(int preorder[], int inorder[], int len)
     }
     return root;
 }
+
+//------------------------------------------------------------------------------
+
+//给出二叉树的中序遍历和后序遍历，请重建二叉树
+/*
+ * Node *constructTree(int inorderSequence[], int postorderSequence[], int len)
+ * {
+ *     if(inorderSequence == NULL || postorderSequence == NULL || len < 1) return NULL;
+ *     g_InvalidInput = false;
+ *     Node *root= conststructCore(inorderSequence, inorderSequence + len - 1,
+ *          postorderSequence, postorderSequence + len - 1);
+ *     if(g_InvalidInput == true)
+ *     {
+ *         distroyTree(root);
+ *         return NULL;
+ *     }
+ *     return root;
+ * }
+ * 
+ * Node *constructCore(int *inorderLeft, int *inorderRight, int *postorderLeft, int *postorderRight)
+ * {
+ *     Node *node = (Node *)malloc(sizeof(Node));
+ *     node->data = *postorderRight;
+ *     node->left = node->right = NULL;
+ *     if(inorderLeft == inorderRight)
+ *     {
+ *         if(postorderLeft == postorderRight && *inorderLeft == *postorderLeft)
+ *             return node;
+ *         else
+ *         {
+ *             g_InvalidInput = false;
+ *             return NULL;
+ *         }
+ *     }
+ *     int *inorderRoot = inorderLeft;
+ *     while(inorderRoot <= inorderRight && *inorderRoot != *postorderRight)
+ *         ++inorderRoot;
+ *     if(inorderRoot > inorderRight)
+ *     {
+ *         g_InvalidInput = false;
+ *         return node;
+ *     }
+ *     int leftSubtreeSize = inorderRoot - inorderLeft;
+ *     int rightSubtreeSize = inorderRight - inorderRoot;
+ *     if(leftSubtreeSize > 0)
+ *         node->left = constructCore(inorderLeft, inorderRoot - 1,
+ *                 postorderLeft, postorderLeft + leftSubtreeSize - 1);
+ *     if(rightSubtreeSize > 0)
+ *         node->right = constructCore(inorderRoot + 1, inorderRight,
+ *                 postorderLeft + leftSubtreeSize, postorderRight - 1);
+ *     return node;
+ * }
+ */
+
 //------------------------------------------------------------------------------
 
 int main(int argc, const char *argv[])
@@ -521,7 +579,7 @@ int main(int argc, const char *argv[])
     TreeNode *p = root->right;
     TreeNode *q = p->right;
     p = p->left;
-    TreeNode *forefather = findforefather(root, p, q);
+    TreeNode *forefather = _commonAncestor(root, p, q);
     printf("%d\n", forefather->data);
     return 0;
 }
