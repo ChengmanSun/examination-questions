@@ -7,7 +7,7 @@
 *  @FileName       : sort.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/16 16:00:12
-*  @Last Modified  : 2017/08/08 14:08:39
+*  @Last Modified  : 2017/08/09 11:14:29
 ********************************************************************************
 */
 
@@ -374,7 +374,8 @@ static void Merge(int data[], int copy[], int start, int end)
 {
     if(start >= end)
         return;
-    int middle = (start + end) / 2;
+    // int middle = (start + end) / 2;
+    int middle = start + (end - start) / 2;
     Merge(copy, data, start, middle);
     Merge(copy, data, middle + 1, end);
     int i = start, j = middle + 1;
@@ -400,9 +401,7 @@ void MergeSort(int a[], int n)
     //递归到最后第一次返回时并不确定是从a数组并归到copy数组，或者从copy数组并归到a数组。
     //所以刚开始需要使两个数组有相同的数据。
     memcpy(copy, a, sizeof(int) * n);
-    Merge(a, copy, 0, n - 1);
-    //数据最后被并归到了copy中，要把它复制回原来的数组中。
-    memcpy(a, copy, sizeof(int) * n);
+    Merge(copy, a, 0, n - 1);
     free(copy);
 }
 

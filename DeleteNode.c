@@ -7,12 +7,13 @@
 *  @FileName       : DeleteNode.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/12 20:20:48
-*  @Last Modified  : 2017/07/09 15:24:16
+*  @Last Modified  : 2017/08/10 19:01:23
 ********************************************************************************
 */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct ListNode {
     int data;
@@ -63,7 +64,7 @@ void deleteNode(Node **head, Node *node)
         Node **toBeDelete = head;
         while(*toBeDelete != node)
             toBeDelete = &(*toBeDelete)->next;
-        free(*toBelete);
+        free(*toBeDelete);
         *toBeDelete = NULL;
     }
 }
