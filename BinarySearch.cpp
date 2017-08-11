@@ -7,7 +7,7 @@
 *  @FileName       : BinarySearch.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/19 10:19:15
-*  @Last Modified  : 2017/08/11 00:47:03
+*  @Last Modified  : 2017/08/11 14:52:06
 ********************************************************************************
 */
 
@@ -75,209 +75,56 @@ int BinarySearch(int a[], int low, int high, int key)
         return BinarySearch(a, middle+1, high, key);
 }
 
-//查找第一个大于key的成员的下标
-//uper_bound(int a[], int n, int key)
-/*
- * int firstGreater(int a[], int n, int key)
- * {
- *     if(a == NULL || n < 1)
- *         return -1;
- *     int low = 0, high = n - 1;
- *     while(low < high)
- *     {
- *         int middle = low + (high - low) / 2;
- *         if(a[middle] <= key)
- *             low = middle + 1;
- *         else
- *             high = middle;
- *     }
- *     return a[low] > key ? high : -1;
- * }
- */
+int findFirstEqual(int a[], int n, int key)
+{
+    if(a == NULL || n < 1) return -1;
+    int low = 0, high = n - 1;
+    while(low < high)
+    {
+        int middle = low + (high - low) / 2;
+        if(a[middle] < key)
+            low = middle + 1;
+        else /* if (a[middle] >= key) */
+            high = middle;
+    }
+    return a[low] == key ? low : -1;
+}
 
+//查找第一个大于key的成员的下标
 //uper_bound(int a[], int n, int key)
 int firstGreater(int a[], int n, int key)
 {
-    if(a == NULL || n <= 0)
+    if(a == NULL || n < 1)
         return -1;
     int low = 0, high = n - 1;
-    while(low <= high)
+    while(low < high)
     {
         int middle = low + (high - low) / 2;
         if(a[middle] <= key)
             low = middle + 1;
         else
-        {
-            if(middle == 0 || a[middle - 1] <= key)
-                return middle;
-            else
-                high = middle - 1;
-        }
+            high = middle;
     }
-    return -1;
+    return a[low] > key ? high : -1;
 }
 
 //查找大于或者第一个等于的成员的下标 (>=)
 // int lower_bound(int a[], int n, int key)
-/*
- * int firstGreaterOrEqual(int a[], int n, int key)
- * {
- *     if(a == NULL || n < 1)
- *         return -1;
- * 
- *     int low = 0, high = n - 1;
- *     while(low < high)
- *     {
- *         int middle = low + (high - low) / 2;
- *         if(a[middle] < key)
- *             low = middle + 1;
- *         else
- *             high = middle;
- *     }
- *     return a[high] >= key ? high : -1;
- * }
- */
-
-// int lower_bound(int a[], int n, int key)
 int firstGreaterOrEqual(int a[], int n, int key)
 {
-    if(a == NULL || n <= 0)
+    if(a == NULL || n < 1)
         return -1;
+
     int low = 0, high = n - 1;
-    while(low <= high)
+    while(low < high)
     {
         int middle = low + (high - low) / 2;
         if(a[middle] < key)
             low = middle + 1;
         else
-        {
-            if(middle == 0 || a[middle - 1] < key)
-                return middle;
-            else
-                high = middle - 1;
-        }
+            high = middle;
     }
-    return -1;
-}
-
-//查找最后一个小于key的成员的下标(<)
-/*
- * int lastLess(int a[], int n, int key)
- * {
- *     if(a == NULL || n < 1)
- *         return -1;
- * 
- *     int low = 0, high = n - 1;
- *     while(low < high)
- *     {
- *         int middle = low + (high - low + 1) / 2;
- *         if(a[middle] < key)
- *             low = middle;
- *         else
- *             high = middle - 1;
- *     }
- *     return a[low] < key ? low : -1;
- * }
- */
-
-int lastLess(int a[], int n, int key)
-{
-    if(a == NULL || n <= 0)
-        return -1;
-    int low = 0, high = n - 1;
-    while(low <= high)
-    {
-        int middle = low + (high - low) / 2;
-        if(a[middle] >= key)
-            high = middle - 1;
-        else
-        {
-            if(middle == 0 || a[middle + 1] >= key)
-                return middle;
-            else
-                low = middle + 1;
-        }
-    }
-    return -1;
-}
-
-/*
- * int lastLessOrEqual(int a[], int n, int key)
- * {
- *     if(a == NULL || n < 1)
- *         return -1;
- *     int low = 0, high = n - 1;
- *     while(low < high)
- *     {
- *         int middle = low + (high - low + 1) / 2;
- *         if(a[middle] <= key)
- *             low = middle;
- *         else
- *             high = middle - 1;
- *     }
- *     return a[low] <= key ? low : -1;
- * }
- */
-
-int lastLessOrEqual(int a[], int n, int key)
-{
-    if(a == NULL || n < 1)
-        return -1;
-    int low = 0, high = n - 1;
-    while(low <= high)
-    {
-        int middle = low + (high - low) / 2;
-        if(a[middle] > key)
-            high = middle - 1;
-        else
-        {
-            if(middle == n - 1 || a[middle + 1] > key)
-                return middle;
-            else
-                low = middle + 1;
-        }
-    }
-    return -1;
-}
-
-/*
- * int findFirstEqual(int a[], int n, int key)
- * {
- *     if(a == NULL || n < 1) return -1;
- *     int low = 0, high = n - 1;
- *     while(low <= high)
- *     {
- *         int middle = low + (high - low) / 2;
- *         if(a[middle] < key)
- *             low = middle + 1;
- *         else [> if (a[middle] >= key) <]
- *             high = middle - 1;
- *     }
- *     return a[low] == key ? low : -1;
- * }
- */
-
-int findFirstEqual(int a[], int n, int key)
-{
-    if(a == NULL || n <= 0)
-        return -1;
-    int low = 0, high = n - 1;
-    while(low <= high)
-    {
-        int middle = low + (high - low) / 2;
-        if(a[middle] == key)
-        {
-            if(middle == 0 || a[middle - 1] < key)
-                return middle;
-            else
-                high = middle - 1;
-        }
-        else if(a[middle] < key)
-            low = middle + 1;
-        else
-            high = middle - 1;
-    }
-    return -1;
+    return a[high] >= key ? high : -1;
 }
 
 int findLastEqual(int a[], int n, int key)
@@ -285,23 +132,186 @@ int findLastEqual(int a[], int n, int key)
     if(a == NULL || n < 1)
         return -1;
     int low = 0, high = n - 1;
-    while(low <= high)
+    while(low < high)
     {
-        int middle = low + (high - low) / 2;
-        if(a[middle] == key)
-        {
-            if(middle == n - 1 || a[middle+1] > key)
-                return middle;
-            else
-                low = middle + 1;
-        }
-        else if(a[middle] < key)
-            low = middle + 1;
+        int middle = low + (high - low + 1) / 2;
+        if(a[middle] <= key)
+            low = middle;
         else
             high = middle - 1;
     }
-    return - 1;
+    return a[low] == key ? low : -1;
 }
+
+//查找最后一个小于key的成员的下标(<)
+int lastLess(int a[], int n, int key)
+{
+    if(a == NULL || n < 1)
+        return -1;
+
+    int low = 0, high = n - 1;
+    while(low < high)
+    {
+        int middle = low + (high - low + 1) / 2;
+        if(a[middle] < key)
+            low = middle;
+        else
+            high = middle - 1;
+    }
+    return a[low] < key ? low : -1;
+}
+
+int lastLessOrEqual(int a[], int n, int key)
+{
+    if(a == NULL || n < 1)
+        return -1;
+    int low = 0, high = n - 1;
+    while(low < high)
+    {
+        int middle = low + (high - low + 1) / 2;
+        if(a[middle] <= key)
+            low = middle;
+        else
+            high = middle - 1;
+    }
+    return a[low] <= key ? low : -1;
+}
+
+//------------------------------------------------------------------------------
+
+/*
+ * //uper_bound(int a[], int n, int key)
+ * int firstGreater(int a[], int n, int key)
+ * {
+ *     if(a == NULL || n <= 0)
+ *         return -1;
+ *     int low = 0, high = n - 1;
+ *     while(low <= high)
+ *     {
+ *         int middle = low + (high - low) / 2;
+ *         if(a[middle] <= key)
+ *             low = middle + 1;
+ *         else
+ *         {
+ *             if(middle == 0 || a[middle - 1] <= key)
+ *                 return middle;
+ *             else
+ *                 high = middle - 1;
+ *         }
+ *     }
+ *     return -1;
+ * }
+ * 
+ * // int lower_bound(int a[], int n, int key)
+ * int firstGreaterOrEqual(int a[], int n, int key)
+ * {
+ *     if(a == NULL || n <= 0)
+ *         return -1;
+ *     int low = 0, high = n - 1;
+ *     while(low <= high)
+ *     {
+ *         int middle = low + (high - low) / 2;
+ *         if(a[middle] < key)
+ *             low = middle + 1;
+ *         else
+ *         {
+ *             if(middle == 0 || a[middle - 1] < key)
+ *                 return middle;
+ *             else
+ *                 high = middle - 1;
+ *         }
+ *     }
+ *     return -1;
+ * }
+ * 
+ * int lastLess(int a[], int n, int key)
+ * {
+ *     if(a == NULL || n <= 0)
+ *         return -1;
+ *     int low = 0, high = n - 1;
+ *     while(low <= high)
+ *     {
+ *         int middle = low + (high - low) / 2;
+ *         if(a[middle] >= key)
+ *             high = middle - 1;
+ *         else
+ *         {
+ *             if(middle == 0 || a[middle + 1] >= key)
+ *                 return middle;
+ *             else
+ *                 low = middle + 1;
+ *         }
+ *     }
+ *     return -1;
+ * }
+ * 
+ * int lastLessOrEqual(int a[], int n, int key)
+ * {
+ *     if(a == NULL || n < 1)
+ *         return -1;
+ *     int low = 0, high = n - 1;
+ *     while(low <= high)
+ *     {
+ *         int middle = low + (high - low) / 2;
+ *         if(a[middle] > key)
+ *             high = middle - 1;
+ *         else
+ *         {
+ *             if(middle == n - 1 || a[middle + 1] > key)
+ *                 return middle;
+ *             else
+ *                 low = middle + 1;
+ *         }
+ *     }
+ *     return -1;
+ * }
+ * 
+ * int findFirstEqual(int a[], int n, int key)
+ * {
+ *     if(a == NULL || n <= 0)
+ *         return -1;
+ *     int low = 0, high = n - 1;
+ *     while(low <= high)
+ *     {
+ *         int middle = low + (high - low) / 2;
+ *         if(a[middle] == key)
+ *         {
+ *             if(middle == 0 || a[middle - 1] < key)
+ *                 return middle;
+ *             else
+ *                 high = middle - 1;
+ *         }
+ *         else if(a[middle] < key)
+ *             low = middle + 1;
+ *         else
+ *             high = middle - 1;
+ *     }
+ *     return -1;
+ * }
+ * 
+ * int findLastEqual(int a[], int n, int key)
+ * {
+ *     if(a == NULL || n < 1)
+ *         return -1;
+ *     int low = 0, high = n - 1;
+ *     while(low <= high)
+ *     {
+ *         int middle = low + (high - low) / 2;
+ *         if(a[middle] == key)
+ *         {
+ *             if(middle == n - 1 || a[middle+1] > key)
+ *                 return middle;
+ *             else
+ *                 low = middle + 1;
+ *         }
+ *         else if(a[middle] < key)
+ *             low = middle + 1;
+ *         else
+ *             high = middle - 1;
+ *     }
+ *     return - 1;
+ * }
+ */
 
 int main(int argc, const char *argv[])
 {
@@ -315,10 +325,11 @@ int main(int argc, const char *argv[])
     // int index = BinarySearch(array, sizeof(array)/sizeof(array[0]), key);  
     // int index = BinarySearch(array, 0, sizeof(array)/sizeof(array[0]) - 1, key); 
     // int index = firstGreater(array, sizeof(array)/sizeof(array[0]), key);
-    // int index = firstLess(array, sizeof(array)/sizeof(array[0]), key);
     // int index = firstGreaterOrEqual(array, sizeof(array)/sizeof(array[0]), key);
-    int index = lastLessOrEqual(array, sizeof(array)/sizeof(array[0]), key);
-    // int index = lastEqual(array, sizeof(array)/sizeof(array[0]), key);
+    // int index = lastLess(array, sizeof(array)/sizeof(array[0]), key);
+    // int index = lastLessOrEqual(array, sizeof(array)/sizeof(array[0]), key);
+    int index = findFirstEqual(array, sizeof(array)/sizeof(array[0]), key);
+    // int index = findLastEqual(array, sizeof(array)/sizeof(array[0]), key);
     printf("index:%d\n", index);
     return 0;
 }

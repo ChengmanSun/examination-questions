@@ -7,7 +7,7 @@
 *  @FileName       : alpha.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/15 09:15:11
-*  @Last Modified  : 2017/06/05 22:38:41
+*  @Last Modified  : 2017/08/11 11:12:52
 ********************************************************************************
 */
 
@@ -29,7 +29,7 @@ char *string_toupper(char *s)
     {
         if(isalpha(*ptr))
             *ptr &= ~32;
-        ptr++;
+        ++ptr;
     }
     return s;
 }
