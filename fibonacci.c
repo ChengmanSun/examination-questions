@@ -7,7 +7,7 @@
 *  @FileName       : fibonacci.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/01 22:07:23
-*  @Last Modified  : 2017/07/09 15:48:58
+*  @Last Modified  : 2017/08/12 16:10:39
 ********************************************************************************
 */
 
@@ -31,14 +31,14 @@ int fibonacci(int n)
     if(n == 1)
         return 1;
 
-    int a = 0, b = 1 , next;
+    int a = 0, b = 1 , c;
     for(int i = 2; i <= n; ++i)
     {
-        next = a + b;
+        c = a + b;
         a = b;
-        b = next;
+        b = c;
     }
-    return next;
+    return c;
 }
 
 //求斐波纳契数的前n项的和

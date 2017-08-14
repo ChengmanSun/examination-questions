@@ -7,13 +7,13 @@
 *  @FileName       : findNumberWidthSum.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/16 22:12:27
-*  @Last Modified  : 2017/07/10 15:50:28
+*  @Last Modified  : 2017/08/13 14:23:12
 ********************************************************************************
 */
 
 #include <stdio.h>
 
-//输入一个弟增的数组和一个数字s，在数组中查找两个数，使得它们的和等于s。如果有多
+//输入一个非递减的数组和一个数字s，在数组中查找两个数，使得它们的和等于s。如果有多
 //对数字的和等于s，输出任意一对即可。
 bool findNumbersWidthSum(int a[], int n, int sum, int *number1, int *number2)
 {

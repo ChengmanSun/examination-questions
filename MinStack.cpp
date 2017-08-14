@@ -7,7 +7,7 @@
 *  @FileName       : MinStack.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/13 18:31:04
-*  @Last Modified  : 2017/07/11 18:32:28
+*  @Last Modified  : 2017/08/14 21:19:24
 ********************************************************************************
 */
 
@@ -19,37 +19,37 @@ template<typename T>
 class MinStack
 {
 private:
-    std::stack<T> m_Data;
-    std::stack<T *> m_Min;
+    std::stack<T> m_dat;
+    std::stack<T *> m_min;
 public:
-    void push(int data)
+    void push(const T &data)
     {
-        m_Data.push(data);
-        if(m_Min.empty() || data < *(m_Min.top()))
-            m_Min.push(&m_Data.top());
+        m_dat.push(data);
+        if(m_min.empty() || data < *m_min.top())
+            m_min.push(&m_dat.top());
         else
-            m_Min.push(m_Min.top());
+            m_min.push(m_min.top());
     } 
 
     void pop(void)
     {
-        m_Data.pop();
-        m_Min.pop();
+        m_dat.pop();
+        m_min.pop();
     }
 
     T &top()
     {
-        return m_Data.top();
+        return m_dat.top();
     } 
 
     T &min(void)
     {
-        return *(m_Min.top());
+        return *(m_min.top());
     }
 
     bool empty()
     {
-        return m_Data.empty();
+        return m_dat.empty();
     }
 };
 

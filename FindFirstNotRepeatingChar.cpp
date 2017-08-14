@@ -7,7 +7,7 @@
 *  @FileName       : FindFirstNotRepeatingChar.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/15 21:29:44
-*  @Last Modified  : 2017/07/10 10:05:12
+*  @Last Modified  : 2017/08/12 17:14:34
 ********************************************************************************
 */
 
@@ -24,6 +24,6 @@ char findFirstNotRepeatingChar(const char *str)
         HashTable[*c]++;
     for(int i = 0; i < sizeof(HashTable)/sizeof(HashTable[0]); ++i)
         if(HashTable[i] == 1)
-            return HashTable[i];
+            return i;
     return '\0';
 }

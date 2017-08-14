@@ -7,7 +7,7 @@
 *  @FileName       : DeleteNode.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/12 20:20:48
-*  @Last Modified  : 2017/08/10 19:01:23
+*  @Last Modified  : 2017/08/11 15:38:06
 ********************************************************************************
 */
 
@@ -61,10 +61,10 @@ void deleteNode(Node **head, Node *node)
     }
     else
     {
-        Node **toBeDelete = head;
-        while(*toBeDelete != node)
-            toBeDelete = &(*toBeDelete)->next;
-        free(*toBeDelete);
-        *toBeDelete = NULL;
+        Node **tail = head;
+        while(*tail != node)
+            tail = &(*tail)->next;
+        free(*tail);
+        *tail = NULL;
     }
 }

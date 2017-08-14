@@ -7,7 +7,7 @@
 *  @FileName       : findTheNumberApearOnce.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/16 20:33:59
-*  @Last Modified  : 2017/07/10 13:52:03
+*  @Last Modified  : 2017/08/13 14:15:04
 ********************************************************************************
 */
 
@@ -16,9 +16,9 @@
 //一个整型数组中除了两个数字只出现了一次之外，其它数字都出现了两次。
 //请找出这两个数字。
 
-bool findNumberAppearOnce(int a[], int n, int *number1, int *number2)
+bool findNumberAppearOnce(int a[], int n, int *num1, int *num2)
 {
-    if(a == NULL || n <= 0 || number1 == NULL || number2 == NULL)
+    if(a == NULL || n <= 0 || num1 == NULL || num2 == NULL)
         return false;
 
     int sum = a[0];
@@ -28,13 +28,13 @@ bool findNumberAppearOnce(int a[], int n, int *number1, int *number2)
     while( !(sum & flag) )
         flag <<= 1;
 
-    *number1 = *number2 = 0;
+    *num1 = *num2 = 0;
     for(int i = 0; i < n; ++i)
     {
         if(a[i] & flag)
-            *number1 ^= a[i];
+            *num1 ^= a[i];
         else
-            *number2 ^= a[i];
+            *num2 ^= a[i];
     }
 }
 

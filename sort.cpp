@@ -7,7 +7,7 @@
 *  @FileName       : sort.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/16 16:00:12
-*  @Last Modified  : 2017/08/09 11:14:29
+*  @Last Modified  : 2017/08/13 16:44:36
 ********************************************************************************
 */
 
@@ -217,21 +217,25 @@ void QuickSort(int a[], int low, int high, int (*compare)(int, int))
 }
 
 //快速排序非递归法
+typedef struct BORDER{
+    int left, right;
+    BORDER(int l, int r):left(l),right(r){};
+} BORDER;
 void QuickSort(int a[], int n, int (*compare)(int, int))
 {
     if(a == NULL || n < 2)
         return;
-    std::stack<std::pair<int, int> > stk;
-    stk.push(std::pair<int, int>(0, n - 1));
+    std::stack<BORDER> stk;
+    stk.push(BORDER(0, n -1));
     while(!stk.empty())
     {
-        std::pair<int, int> border = stk.top();
+        BORDER border = stk.top();
         stk.pop();
-        int pivot = Partition(a, border.first, border.second, compare);
-        if(border.first < pivot - 1)
-            stk.push(std::pair<int, int>(border.first, pivot - 1));
-        if(border.second > pivot + 1)
-            stk.push(std::pair<int, int>(pivot + 1, border.second));
+        int pivotIndex = Partition(a, border.left, border.right, compare);
+        if(border.left < pivotIndex - 1)
+            stk.push(BORDER(border.left, pivotIndex - 1));
+        if(border.right > pivotIndex + 1)
+            stk.push(BORDER(pivotIndex + 1, border.right));
     }
 }
 
@@ -407,7 +411,7 @@ void MergeSort(int a[], int n)
 
 //------------------------------------------------------------------------------
 
-#define SIZE 500000
+#define SIZE 1000000
 int main(int argc, const char *argv[])
 {
     (void)argc;
@@ -428,8 +432,8 @@ int main(int argc, const char *argv[])
     // ShellSort(array, SIZE, [](int a, int b)->bool{return a < b;}); 
     // ShellSort2(array, SIZE, [](int a, int b)->bool{return a < b;}); 
     // QuickSort(array, 0, SIZE - 1, [](int a, int b)->int{return a - b;});
-    QuickSort(array, SIZE, [](int a, int b)->int{return a - b;});
-    // QuickSort2(array, 0, SIZE - 1, [](int a, int b)->bool{return a < b;});
+    // QuickSort(array, SIZE, [](int a, int b)->int{return a - b;});
+    QuickSort2(array, 0, SIZE - 1, [](int a, int b)->bool{return a < b;});
     // MergeSort(array, SIZE);
     // HeapSort(array, SIZE);
     // qsort(array1, SIZE, sizeof(int), [](const void*d1, const void*d2)->int{return *(int *)d1 - *(int *)d2;});

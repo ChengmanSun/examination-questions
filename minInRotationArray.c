@@ -7,7 +7,7 @@
 *  @FileName       : minInRotationArray.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/07/11 16:05:06
-*  @Last Modified  : 2017/07/11 17:59:58
+*  @Last Modified  : 2017/08/14 21:08:44
 ********************************************************************************
 */
 
@@ -24,27 +24,26 @@ int minInOrder(int a[], int n)
             return i;
 }
 
-//a[low] == a[middle] 有两种情况：
-//第一种情况middle在旋转数组的后半部分，这时候a[low] == a[middle] && a[middle] == a[high]，就只能用遍历法寻找最小值。
-//第二种情况middle在旋转数组的前半部分，这时候令low = middle + 1，然后继续寻找最小值。
+//a[left] == a[middle] 有两种情况：
+//第一种情况middle在旋转数组的后半部分，这时候a[left] == a[middle] && a[middle] == a[right]，就只能用遍历法寻找最小值。
+//第二种情况middle在旋转数组的前半部分，这时候令left = middle + 1，然后继续寻找最小值。
 int minInRotationArray(int a[], int n)
 {
     if(a == NULL || n <= 0)
         return -1;
-    int low = 0, high = n - 1;
-    while(low <= high)
+    int left = 0, right = n - 1;
+    while(left < right)
     {
-        int middle = low + (high - low) / 2;
-        if(a[low] == a[middle] && a[middle] == a[high])
+        int middle = left + (right - left) / 2;
+        if(a[left] == a[middle] && a[middle] == a[right])
             return minInOrder(a, n);
-        if(middle > 0 && a[middle - 1] > a[middle])
-            return middle;
-        else if(a[low] <= a[middle])
-            low = middle + 1;
+        else if(a[middle] >= a[0])
+            left = middle + 1;
         else
-            high = middle - 1;
+            right = middle;
     }
-    return 0; //如果没有找到a[middle - 1] > a[middle]的数，则说明这个旋转数组旋转了0个元素 
+
+    return left;
 }
 
 int main(int argc, const char *argv[])

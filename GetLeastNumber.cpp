@@ -7,7 +7,7 @@
 *  @FileName       : GetLeastNumber.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/14 15:43:22
-*  @Last Modified  : 2017/07/19 10:29:24
+*  @Last Modified  : 2017/08/14 17:33:32
 ********************************************************************************
 */
 
@@ -107,43 +107,49 @@ void GetLeastNumber(int a[], int n, PriorityQueue &output, int k)
 }
 
 //方法四，由于优先队列使用的是堆算法，所以可以自己写堆算法，实现一样的功能
+//堆调整算法，调整为最大堆
 void heapAdjust(int heap[], int size, int i)
 {
     // j = 2*i + 1 使j指向左叶子结点
-    for(int j = 2*i + 1; j < size; j = 2*i + 1)
+    int temp = heap[i];
+    int j = 2*i + 1;
+    while(j < size)
     {
-        //如果存在右叶子结点，且右叶子结点较大，则j指向右叶子结点
+        //如果存在右叶子结点，且右叶子结点较小，则j指向右叶子结点
         if(j < size - 1 && heap[j] < heap[j+1])
             ++j;
-        //把最大值放到堆顶
+        //把最小值放到堆顶
         if(heap[i] >= heap[j])
             break;
         else
         {
-            int temp = heap[i]; heap[i] = heap[j]; heap[j] = temp;
+            heap[i] = heap[j];
             i = j;
+            j = 2*i + 1;
         }
     }
+    heap[i] = temp;
 }
 
-void GetLeastNumber_h(int a[], int n, int minTable[], int k)
+void GetLeastNumber_h(int a[], int n, int output[], int k)
 {
-    if(a == NULL || minTable == NULL || k < 1 || n < k )
+    if(a == NULL || output == NULL || k < 1 || n < k )
         return;
 
     for(int i = 0; i < k; ++i)
-        minTable[i] = a[i];
-    //在minTable中创建最大堆
+        output[i] = a[i];
+
+    //创建最大堆
     // k/2-1是最后一个非叶子结点
-    for(int i = k / 2 - 1; i >= 0; --i)
-        heapAdjust(minTable, k, i);
+    for(int i = k/2 - 1; i >= 0; --i)
+        heapAdjust(output, k, i);
 
     for(int i = k; i < n; ++i)
     {
-        if(a[i] < minTable[0])
+        if(a[i] < output[0])
         {
-            minTable[0] = a[i];
-            heapAdjust(minTable, k, 0);
+            output[0] = a[i];
+            heapAdjust(output, k, 0);
         }
     }
 }
