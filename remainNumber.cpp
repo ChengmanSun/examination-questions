@@ -7,7 +7,7 @@
 *  @FileName       : remainNumber.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/21 14:26:10
-*  @Last Modified  : 2017/07/13 15:41:49
+*  @Last Modified  : 2017/08/15 21:02:06
 ********************************************************************************
 */
 
@@ -53,26 +53,21 @@
 
 int remainNumber(int n, int m)
 {
-    std::list<int> josephus;
+    std::list<int> lst;
     for(int i = 1; i <= n; ++i)
-        josephus.push_back(i);
-    int count = 1;
-    while(josephus.size() > 1)
+        lst.push_back(i);
+    std::list<int>::iterator iter = lst.begin();
+    while(lst.size() > 1)
     {
-        for(std::list<int>::iterator iter = josephus.begin(); iter != josephus.end();)
-        {
-            if(count++ == m)
-            {
-                count = 1;
-                std::list<int>::iterator temp = iter++;
-                // printf("%d ", *temp);
-                josephus.erase(temp);
-            }
-            else
-                ++iter;
-        }
+        for(int i = 1; i < m; ++i)
+            if(++iter == lst.end()) //必须是++iter，如果是iter++将会段错误
+                iter = lst.begin();
+        std::list<int>::iterator temp = iter;
+        if(++iter == lst.end()) iter = lst.begin();
+        // printf("%d\n", *temp);
+        lst.erase(temp);
     }
-    return *josephus.begin();
+    return lst.front();
 }
 
 //用数学方法解题：

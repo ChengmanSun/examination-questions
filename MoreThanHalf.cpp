@@ -7,7 +7,7 @@
 *  @FileName       : MoreThanHalf.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/14 14:36:59
-*  @Last Modified  : 2017/07/11 19:39:26
+*  @Last Modified  : 2017/08/15 11:54:21
 ********************************************************************************
 */
 
@@ -39,13 +39,13 @@ int partition(int a[], int low, int high)
 
 bool g_InvalidInput = false;
 
-void checkInvalid(int a[], int n, int value)
+bool checkInvalid(int a[], int n, int value)
 {
-    int times = 0;
+    int cnt = 0;
     for(int i = 0; i < n; ++i)
         if(a[i] == value)
-            ++times;
-    g_InvalidInput = times*2 < n;
+            ++cnt;
+    return cnt*2 < n;
 }
 
 int MoreThanHalt(int a[], int n)
@@ -56,16 +56,17 @@ int MoreThanHalt(int a[], int n)
         return 0;
     }
     g_InvalidInput = false;
-    int index = partition(a, 0, n - 1);
-    while(index != n/2)
+    int middle = n / 2;
+    int povitIndex = partition(a, 0, n - 1);
+    while(povitIndex != middle)
     {
-        if(index < n/2)
-            index = partition(a, index+1, n-1);
+        if(povitIndex < middle)
+            povitIndex = partition(a, povitIndex+1, n-1);
         else
-            index = partition(a, 0, index-1);
+            povitIndex = partition(a, 0, povitIndex-1);
     }
-    checkInvalid(a, n, a[index]);
-    return a[index];
+    g_InvalidInput = checkInvalid(a, n, a[povitIndex]);
+    return a[povitIndex];
 }
 
 int main(int argc, const char *argv[])

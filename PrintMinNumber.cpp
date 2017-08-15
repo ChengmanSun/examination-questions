@@ -7,7 +7,7 @@
 *  @FileName       : PrintMinNumber.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/15 17:07:19
-*  @Last Modified  : 2017/07/12 14:59:50
+*  @Last Modified  : 2017/08/15 15:44:40
 ********************************************************************************
 */
 
@@ -20,15 +20,15 @@
 
 #define BUFF_LENGTH 64
 
-int strcompare(const void *num1, const void *num2)
+int strcompare(const void *p1, const void *p2)
 {
-    char strNumber1[BUFF_LENGTH * 2];   
-    char strNumber2[BUFF_LENGTH * 2];   
-    strcpy(strNumber1, *(char **)num1);
-    strcat(strNumber1, *(char **)num2);
-    strcpy(strNumber2, *(char **)num2);
-    strcat(strNumber2, *(char **)num1);
-    return strcmp(strNumber1, strNumber2);
+    char strNum1[BUFF_LENGTH * 2];   
+    char strNum2[BUFF_LENGTH * 2];   
+    strcpy(strNum1, *(char **)p1);
+    strcat(strNum1, *(char **)p2);
+    strcpy(strNum2, *(char **)p2);
+    strcat(strNum2, *(char **)p1);
+    return strcmp(strNum1, strNum2);
 }
 
 void PrintMinNumber(int a[], int n)
@@ -43,9 +43,10 @@ void PrintMinNumber(int a[], int n)
     }
     qsort(strArray, n, sizeof(char *), strcompare);
     for(int i = 0; i < n; ++i)
+    {
         printf("%s ", strArray[i]);
-    for(int i = 0; i < n; ++i)
         free(strArray[i]);
+    }
     free(strArray);
 }
 

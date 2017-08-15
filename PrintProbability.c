@@ -7,7 +7,7 @@
 *  @FileName       : PrintProbability.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/17 14:58:34
-*  @Last Modified  : 2017/07/13 10:39:34
+*  @Last Modified  : 2017/08/15 17:39:51
 ********************************************************************************
 */
 
@@ -31,9 +31,7 @@
 void ProbabilityRecursivly(int n, int index, int *pTable, int sum)
 {
     if(index == n)
-    {
         pTable[sum - n]++;
-    }
     else
     {
         for(int i = 1; i <= 6; ++i)

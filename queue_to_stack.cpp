@@ -7,7 +7,7 @@
 *  @FileName       : queue_to_stack.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/07 15:10:40
-*  @Last Modified  : 2017/06/07 16:23:05
+*  @Last Modified  : 2017/08/15 20:25:13
 ********************************************************************************
 */
 
@@ -18,12 +18,12 @@ template<typename T>
 class Stack
 {
 private:
-    mutable std::queue<T> queue1;
-    mutable std::queue<T> queue2;
+    mutable std::queue<T> q1;
+    mutable std::queue<T> q2;
 public:
     Stack(void){};
     ~Stack(void){};
-    void push(const T &element);
+    void push(const T &data);
     void pop(void);
     T top(void) const;
     size_t size(void) const;
@@ -31,45 +31,41 @@ public:
 };
 
 template<typename T>
-void Stack<T>::push(const T &element)
+void Stack<T>::push(const T &data)
 {
-    if(isEmpty())
-    {
-        queue1.push(element);
-    }
+    if(q1.empty() && q2.empty())
+        q1.push(data);
     else
     {
-        if(queue1.empty())
-            queue2.push(element);
+        if(!q1.empty())
+            q1.push(data);
         else
-            queue1.push(element);
+            q2.push(data);
     }
 }
 
 template<typename T>
 void Stack<T>::pop(void)
 {
-    if(isEmpty())
+    if(q1.empty() && q2.empty())
         throw "stack is empty.";    
-    if(queue1.empty())
+    if(!q1.empty())
     {
-        while(queue2.size() > 1)
+        while(q1.size() > 1)
         {
-            T temp = queue2.front();
-            queue2.pop();
-            queue1.push(temp);
+            q2.push(q1.front());
+            q1.pop();
         }
-        queue2.pop();
+        q1.pop();
     }
     else
     {
-        while(queue1.size() > 1)
+        while(q2.size() > 1)
         {
-            T temp = queue1.front();
-            queue1.pop();
-            queue2.push(temp);
+            q1.push(q2.front());
+            q2.pop();
         }
-        queue1.pop();
+        q2.pop();
     }
 }
 
@@ -79,22 +75,22 @@ T Stack<T>::top(void) const
     T temp;
     if(isEmpty())
         throw "stack is empty.";
-    if(queue1.empty())
+    if(q1.empty())
     {
-        while(queue2.size() > 0)
+        while(q2.size() > 0)
         {
-            temp = queue2.front();
-            queue2.pop();
-            queue1.push(temp);
+            temp = q2.front();
+            q2.pop();
+            q1.push(temp);
         }
     }
     else
     {
-        while(queue1.size() > 0)
+        while(q1.size() > 0)
         {
-            temp = queue1.front();
-            queue1.pop();
-            queue2.push(temp);
+            temp = q1.front();
+            q1.pop();
+            q2.push(temp);
         }
     }
     return temp;
@@ -103,13 +99,13 @@ T Stack<T>::top(void) const
 template<typename T>
 inline size_t Stack<T>::size(void) const
 {
-    return queue1.size() + queue2.size();
+    return q1.size() + q2.size();
 }
 
 template<typename T>
 inline bool Stack<T>::isEmpty(void) const
 {
-    return queue1.empty() && queue2.empty();
+    return q1.empty() && q2.empty();
 }
 
 int main(int argc, const char *argv[])
