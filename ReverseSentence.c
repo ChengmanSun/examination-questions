@@ -69,7 +69,7 @@ char *leftRotationString(char *str, int n)
     return str;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     char str[] = "I am a studunt.";
     char str2[] = "I am a studunt.";

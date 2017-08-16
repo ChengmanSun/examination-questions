@@ -46,7 +46,7 @@ int minInRotationArray(int a[], int n)
     return left;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int a1[] = {3, 4, 5, 1, 2};
     int a2[] = {1, 1, 1, 1, 0, 1};

@@ -111,7 +111,7 @@ void SetPermutation(int a[], int n)
     Permutation(a, n, 0);
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int a[] = {1, 2, 3, 4};
     SubSet(a, sizeof(a)/sizeof(a[0]));

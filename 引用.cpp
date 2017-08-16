@@ -31,7 +31,7 @@
 //没有数组的引用，但却有对指针的引用。如下：pn是n的指针，rn是pn的引用。
 //int n, *pn = &n, *&rn = pn;
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     (void)argc;
     (void)argv;

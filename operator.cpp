@@ -50,7 +50,7 @@ inline bool operator!=(const A &obj1, const A &obj2)
     return !(obj1 == obj2);
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     A a(1), b(2);
     printf("a < b: %d\n", a<b);

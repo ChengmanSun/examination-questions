@@ -24,7 +24,7 @@ size_t mystrlen(const char *str)
     return ptr - str - 1;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int mlength = mystrlen("this is a test of my strlen.");
     int length = strlen("this is a test of my strlen.");

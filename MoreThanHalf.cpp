@@ -69,7 +69,7 @@ int MoreThanHalt(int a[], int n)
     return a[povitIndex];
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int a[] = {3, 3, 2, 3, 5, 6, 8, 3, 3, 2, 6, 3};
     int half = MoreThanHalt(a, sizeof(a)/sizeof(a[0]));

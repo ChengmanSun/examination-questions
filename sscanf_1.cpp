@@ -16,7 +16,7 @@ void test(void)
     printf("%#llx", (int64_t)0xaabbccddeeff1122);
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     test();
     return 0;

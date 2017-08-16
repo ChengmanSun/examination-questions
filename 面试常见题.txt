@@ -474,7 +474,7 @@ int main()
 答：C、D
 
 题. 请问以下代码的输出为：
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int v1 = 0, v2 = 0;
     char ch, *s = "china";

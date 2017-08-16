@@ -24,7 +24,7 @@
  * >>3 == /8
  */
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int i = 5, j = 20;
     printf("%d %d\n", i<<1, i*2);

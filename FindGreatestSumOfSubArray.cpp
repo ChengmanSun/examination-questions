@@ -62,7 +62,7 @@ int maxContinueSubArray(int a[], int n)
     return finalMax;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int a[] = {1, -2, 3, 10, -4, 7, 2, -5};
     int sum = findGreatestSumOfSubArray(a, sizeof(a)/sizeof(a[0]));

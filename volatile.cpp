@@ -51,7 +51,7 @@ void thread2_process(void)
     }
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     volatile unsigned char XByte[3] = {0};
     XByte[0] = 0x34;

@@ -409,7 +409,7 @@ ListNode *findFistCommonNode(ListNode *head1, ListNode *head2)
     return longList;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     ListNode *head = NULL, *head1 = NULL, *head2 = NULL, *newlist = NULL;
     int data[] = {1, 9, 3, 7, 2, 4, 10, 6, 8, 5};

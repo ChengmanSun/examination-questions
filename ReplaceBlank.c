@@ -97,7 +97,7 @@ char *ReplaceMultiBlank(char s[], int n)
     return s;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     char str[100] = "We are happy.";
     char str1[100] = "We    are not  happy.";

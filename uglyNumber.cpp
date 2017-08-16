@@ -71,7 +71,7 @@ int getUglyNumber2(int index)
     return ugly;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     printf("%d\n", getUglyNumber(150));
     printf("%d\n", getUglyNumber2(150));

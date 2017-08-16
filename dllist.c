@@ -85,7 +85,7 @@ void show(DLList *node, void *param)
     printf("%d ", node->data);
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     DLList *head;
     for(int i = 0; i < 10; ++i)

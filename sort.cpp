@@ -412,7 +412,7 @@ void MergeSort(int a[], int n)
 //------------------------------------------------------------------------------
 
 #define SIZE 1000000
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     (void)argc;
     (void)argv;

@@ -42,7 +42,7 @@ void show3(char * const str)
     printf("%s\n", str);
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     char str1[] = "string1";
     const char *str2 = "string2";   //str2和str3是变量指针指向常量字符串

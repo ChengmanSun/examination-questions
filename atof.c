@@ -57,7 +57,7 @@ double atof(const char *str)
     return sign < 0 ? -d : d;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     printf("%lf\n", atof("-0.1256"));
     return 0;

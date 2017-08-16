@@ -46,7 +46,7 @@ void printOneToN(int n)
     free(num);
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     printOneToN(5);
     return 0;

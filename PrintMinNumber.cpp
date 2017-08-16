@@ -50,7 +50,7 @@ void PrintMinNumber(int a[], int n)
     free(strArray);
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int a[] = {3, 32, 321, 5};
     PrintMinNumber(a, sizeof(a)/sizeof(a[0]));

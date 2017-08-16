@@ -37,7 +37,7 @@ class D : public A
 
 };
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     C *pc = new C;
 

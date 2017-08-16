@@ -38,7 +38,7 @@ bool findNumberAppearOnce(int a[], int n, int *num1, int *num2)
     }
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     (void)argc;
     (void)argv;

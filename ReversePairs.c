@@ -56,7 +56,7 @@ int ReversePairs(int data[], int n)
     return count;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int a[] = {7, 5, 6, 4};
     printf("ReversePairs : %d\n", ReversePairs(a, sizeof(a)/sizeof(a[0])));

@@ -28,7 +28,7 @@ void hanoi(int n, char from, char depend, char to)
     }
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     char from = 'A', depend = 'B', to = 'C';
     hanoi(64, from, depend, to);

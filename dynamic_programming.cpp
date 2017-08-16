@@ -147,7 +147,7 @@ int maxContinueSubArray(int a[], int n)
     return max;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int array[] = {1, 5, 2, 6, -1, 7, 8};
     printf("%d\n", maxSubArray(array, sizeof(array)/sizeof(array[0])));

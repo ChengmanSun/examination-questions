@@ -38,7 +38,7 @@ void show(int n, ...)
     va_end(ap);
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     printf("%d\n", 5.0f);
     printf("%f\n", 5);

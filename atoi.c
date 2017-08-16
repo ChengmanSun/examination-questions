@@ -36,7 +36,7 @@ int atoi(const char *str)
     return sign * i;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     printf("%d\n", atoi("-1234a5678"));
     return 0;

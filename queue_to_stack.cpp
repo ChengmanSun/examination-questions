@@ -108,7 +108,7 @@ inline bool Stack<T>::isEmpty(void) const
     return q1.empty() && q2.empty();
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     Stack<int> stk;
     stk.push(1);

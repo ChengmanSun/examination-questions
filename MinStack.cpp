@@ -53,7 +53,7 @@ public:
     }
 };
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     MinStack<int> min;
     min.push(1);

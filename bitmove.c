@@ -17,7 +17,7 @@
 //负数右移时无法去掉最高位的1，但是左移却可以去掉最高位的1。
 //正数和无符号数的位移是一样的。
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int i = 0x80000000; //赋值为负数
     int j = 1;

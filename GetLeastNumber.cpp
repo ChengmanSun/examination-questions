@@ -154,7 +154,7 @@ void GetLeastNumber_h(int a[], int n, int output[], int k)
     }
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int a[] = {1, 4, 5, 8, 6, 7, 9, 3, 2};
     int b[] = {1, 4, 5, 8, 6, 7, 9, 3, 2};

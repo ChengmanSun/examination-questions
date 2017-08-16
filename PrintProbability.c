@@ -64,7 +64,7 @@ void printProbability(int n)
     free(SumTable);
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     printProbability(2);
     return 0;

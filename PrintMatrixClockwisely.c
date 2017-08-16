@@ -38,7 +38,7 @@ void PrintMatrixClockwisely(int *a, int rows, int columns)
         PrintMatrixInCircle(a, rows, columns, start);
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int matrix[][6] = {{1, 3, 3, 5, 8, 9},
                        {9, 4, 3, 2, 1, 4},

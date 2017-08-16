@@ -57,7 +57,7 @@ long long fibonacci_sum(int n)
     return sum;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     printf("%d\n", fibonacci(0));
     printf("%d\n", fibonacci(1));

@@ -40,7 +40,7 @@ char *strncpy(char *dst, int n, const char *src)
     return temp;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
 
     return 0;

@@ -47,7 +47,7 @@ void StringPermutation(char *str)
     Permutation(str, str);
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     char str[] = "abcd";
     StringPermutation(str);

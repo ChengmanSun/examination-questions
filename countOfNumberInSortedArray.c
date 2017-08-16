@@ -55,7 +55,7 @@ int countOfNumberInSortedArray(int a[], int n, int value)
     return last + 1;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int value = 0;
     printf("请输入要查找的数：\n");

@@ -69,7 +69,7 @@ bool is2n(int n)
     return !(n&(n-1));
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     printf("%d\n", number_of_1(0xffff));
     printf("%d\n", is2n(0));

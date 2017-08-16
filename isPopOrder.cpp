@@ -68,7 +68,7 @@ bool isPopOrder(int pushSequence[], int popSequence[], int length)
     return stk.empty() && popIndex == length;
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int push[] = {1, 2, 3, 4, 5};
     int pop[] = {4, 5, 3, 2, 1};
