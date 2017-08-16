@@ -7,7 +7,7 @@
 *  @FileName       : ReorderArray.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/12 21:29:27
-*  @Last Modified  : 2017/07/13 16:00:26
+*  @Last Modified  : 2017/08/16 13:38:21
 ********************************************************************************
 */
 
@@ -21,23 +21,23 @@ void Reorder(int a[], int n)
 {
     if(a == NULL || n < 1)
         return;
-    int low = 0, high = n - 1;
-    while(low < high)
+    int left = 0, right = n - 1;
+    while(left < right)
     {
-        while(low < high && (a[low] & 0x01) == 1) //low向后移动直到找到偶数
-            ++low;
-        while(low < high && (a[high] & 0x01) == 0)//high向前移动直到找到奇数
-            --high;
-        if(low < high)
+        while(left < right && (a[left] & 0x01) == 0) //left向右移动直到找到奇数
+            ++left;
+        while(left < right && (a[right] & 0x01) == 1)//right向左移动直到找到偶数
+            --right;
+        if(left < right)
         {
-            int temp = a[low];
-            a[low] = a[high];
-            a[high] = temp;
+            int temp = a[left];
+            a[left] = a[right];
+            a[right] = temp;
         }
     }
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     int a[50];
     srand(time(NULL));

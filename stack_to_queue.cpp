@@ -7,7 +7,7 @@
 *  @FileName       : stack_to_queue.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/06 20:58:03
-*  @Last Modified  : 2017/06/06 23:59:55
+*  @Last Modified  : 2017/08/16 20:52:01
 ********************************************************************************
 */
 
@@ -18,8 +18,8 @@ template<typename T>
 class Queue
 {
 private:
-    std::stack<T> stack1;
-    std::stack<T> stack2;
+    std::stack<T> stk1;
+    std::stack<T> stk2;
 public:
     Queue(void){};
     ~Queue(void){};
@@ -32,50 +32,50 @@ public:
 template<typename T>
 void Queue<T>::push(const T &element)
 {
-    stack1.push(element);
+    stk1.push(element);
 }
 
 template<typename T>
 T Queue<T>::pop(void)
 {
-    if(stack1.empty() && stack2.empty())
+    if(stk1.empty() && stk2.empty())
         throw "queue is empty.";
-    if(stack2.empty())
+    if(stk2.empty())
     {
-        while(!stack1.empty())
+        while(!stk1.empty())
         {
-            T t = stack1.top();
-            stack1.pop();
-            stack2.push(t);
+            T t = stk1.top();
+            stk1.pop();
+            stk2.push(t);
         }
     }
-    T temp = stack2.top();
-    stack2.pop();
+    T temp = stk2.top();
+    stk2.pop();
     return temp;
 }
 
 template<typename T>
 size_t Queue<T>::size(void) const
 {
-    return stack1.size() + stack2.size();
+    return stk1.size() + stk2.size();
 }
 
 template<typename T>
 bool Queue<T>::isEmpty(void) const
 {
-    return stack1.empty() && stack2.empty();
+    return stk1.empty() && stk2.empty();
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     Queue<int> q;
     q.push(1);
     q.push(2);
     q.push(3);
     q.push(4);
-    printf("size:%d\npop:", q.size());
+    printf("size:%llu\npop:", q.size());
     while(!q.isEmpty())
         printf("%d ", q.pop());
-    printf("\nsize:%d\n", q.size());
+    printf("\nsize:%llu\n", q.size());
     return 1;
 }

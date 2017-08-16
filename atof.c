@@ -7,7 +7,7 @@
 *  @FileName       : atof.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/16 23:41:37
-*  @Last Modified  : 2017/06/25 11:05:29
+*  @Last Modified  : 2017/08/16 21:00:54
 ********************************************************************************
 */
 
@@ -22,7 +22,6 @@ double atof(const char *str)
     int integer = 1;   //用来表明当前处理的是整数部分还是小数部分
     float d = 10.0f;    //小数点的位数
     long long i = 0;
-    double d;
 
     if(str == NULL)
         return 0.0f;

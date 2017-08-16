@@ -7,7 +7,7 @@
 *  @FileName       : string_replay.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/15 09:49:17
-*  @Last Modified  : 2017/06/06 16:08:54
+*  @Last Modified  : 2017/08/16 15:04:29
 ********************************************************************************
 */
 
@@ -26,31 +26,28 @@
 //替换的字符串没有连续的多个空格
 char *ReplaceBlank(char s[], int n)
 {
-    int len = 0, space_count = 0;
-    char *p1, *p2;
-
     if(s == NULL || n <= 0)
         return NULL;
 
-    p1 = s;
+    int spaceCnt = 0;
+    char *p1 = s, *p2;
     while(*p1 != '\0')
-    {
         if(isspace(*p1++))
-            space_count++;
-    }
+            spaceCnt++;
 
-    p2 = p1 + space_count  * 2;
+    p2 = p1 + spaceCnt  * 2;
     if(p2 > s+n-1)
         return NULL;
 
-    while(p1 >= s)
+    for(; p1 >= s; --p1)
     {
         if(!isspace(*p1))
-            *p2-- = *p1--;
+            *p2-- = *p1;
         else
         {
-            p1--;
-            *p2-- = '0', *p2-- = '2', *p2-- = '%';
+            *p2-- = '0';
+            *p2-- = '2';
+            *p2-- = '%';
         }
     }
     return s;
@@ -59,17 +56,15 @@ char *ReplaceBlank(char s[], int n)
 //替换的字符串如果有多个连续空格
 char *ReplaceMultiBlank(char s[], int n)
 {
-    int newstring_len = 0, space_count = 0;
-    char *p1, *p2;
+    int newstring_len = 0, spaceCnt = 0;
+    char *p1 = s, *p2;
 
     if(s == NULL || n < 1)
         return NULL;
-
-    p1 = s;
     while(*p1 != '\0')
     {
         if(isspace(*p1++))
-            ++space_count;
+            ++spaceCnt;
         else
             ++newstring_len;
         //跳过连续空格
@@ -77,7 +72,7 @@ char *ReplaceMultiBlank(char s[], int n)
             ++p1;
     }
 
-    newstring_len += space_count*3;
+    newstring_len += spaceCnt*3;
     if(newstring_len+1 > n)
         return NULL;
 
@@ -88,8 +83,7 @@ char *ReplaceMultiBlank(char s[], int n)
     {
         if(isspace(*p1))
         {
-            --p1;
-            *p2-- = '0', *p2-- = '2', *p2-- = '%';
+            *p2-- = '0'; *p2-- = '2'; *p2-- = '%';
             while(isspace(*p1)) //去掉连续的空格
                 --p1;
         }

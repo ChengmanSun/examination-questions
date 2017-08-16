@@ -7,7 +7,7 @@
 *  @FileName       : remainNumber.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/21 14:26:10
-*  @Last Modified  : 2017/08/15 21:02:06
+*  @Last Modified  : 2017/08/16 13:08:05
 ********************************************************************************
 */
 
@@ -53,6 +53,7 @@
 
 int remainNumber(int n, int m)
 {
+    if(n < 1 || m < 1) return -1;
     std::list<int> lst;
     for(int i = 1; i <= n; ++i)
         lst.push_back(i);
