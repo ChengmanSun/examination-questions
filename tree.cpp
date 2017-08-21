@@ -7,7 +7,7 @@
 *  @FileName       : tree.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/21 12:59:10
-*  @Last Modified  : 2017/08/07 14:48:55
+*  @Last Modified  : 2017/08/20 14:55:50
 ********************************************************************************
 */
 
@@ -83,13 +83,13 @@ void PrintTopToBottom(TreeNode *root)
     dq.push_back(root);
     while(!dq.empty())
     {
-        TreeNode *node = dq.front();
+        TreeNode *temp = dq.front();
         dq.pop_front();
-        printf("%d ", node->data);
-        if(node->left != NULL)
-            dq.push_back(node->left);
-        if(node->right != NULL)
-            dq.push_back(node->right);
+        if(temp->left != NULL)
+            dq.push_back(temp->left);
+        if(temp->right != NULL)
+            dq.push_back(temp->right);
+        printf("%d ", temp->data);
     }
 }
 
@@ -103,7 +103,7 @@ void PrintTopToBottom(TreeNode *root)
 
 //verify:证明、判定
 
-bool VerifySequenceOfBST(int sequence[], int length)
+bool VerifySequenceOfPostorder(int sequence[], int length)
 {
     if(sequence == NULL || length <= 0)
         return false;
@@ -123,12 +123,11 @@ bool VerifySequenceOfBST(int sequence[], int length)
             return false;
     }
 
-    bool left = true;
-    if(i > 0)
-        left = VerifySequenceOfBST(sequence, i);
-    bool right = true;
-    if(j < length - 1)
-        right = VerifySequenceOfBST(sequence + i, length - i - 1);
+    bool left = true, right = true;
+    if(i > 0)           //大于0说明存在左子树
+        left = VerifySequenceOfPostorder(sequence, i);
+    if(i < length - 1)  //i小于length-1说明存在右子树
+        right = VerifySequenceOfPostorder(sequence + i, length - i - 1);
     return left && right;
 }
 
@@ -137,23 +136,24 @@ bool VerifySequenceOfBST(int sequence[], int length)
 //输入一棵二叉树和一个整数，打印出二叉树中结点的值为输入整数的所有路径。从树的根
 //结点往下一直到叶子结点所经过的结点形成一条路径。
 
-void findPath(TreeNode *node, std::vector<TreeNode *> &path, int currsum, int sum)
+void findPathRecursive(TreeNode *node, std::vector<TreeNode *> &path, int &currsum, int sum)
 {
     if(node == NULL)
         return;
     currsum += node->data;
-    path.push_back(node);
     //判断当前节点是否是叶子节点
     bool isLeaf = node->left == NULL && node->right == NULL;
+    path.push_back(node);
     if(currsum == sum && isLeaf)
     {
-        for(std::vector<TreeNode *>::iterator iter = path.begin(); iter != path.end(); ++iter)
-            printf("%d ", (*iter)->data);
+        // for(std::vector<TreeNode *>::iterator iter = path.begin(); iter != path.end(); ++iter)
+        for(std::vector<TreeNode *>::size_type i = 0; i < path.size(); ++i) 
+            printf("%d ", path[i]->data);
         printf("\n");
     }
     //如果不是叶子结节点则遍历它的子结点
-    findPath(node->left, path, currsum, sum);
-    findPath(node->right, path, currsum, sum);
+    findPathRecursive(node->left, path, currsum, sum);
+    findPathRecursive(node->right, path, currsum, sum);
     //返回到父结点之前，在路径上删除当前结点，并减去当前值。
     currsum -= node->data;
     path.pop_back();
@@ -165,34 +165,33 @@ void findTreePath(TreeNode *root, int sum)
         return;
     std::vector<TreeNode *> path;
     int currsum = 0;
-    findPath(root, path, currsum, sum);
+    findPathRecursive(root, path, currsum, sum);
 }
 
 //------------------------------------------------------------------------------
 
 //把一棵搜索二叉树转换成一个双向排抒链表。要求不能创建任何新节点，只能调整树的节点指针。
 
-void Convert(TreeNode *node, TreeNode **listTail)
+void ConvertRecursive(TreeNode *node, TreeNode **tail)
 {
     if(node == NULL)
         return;
-    Convert(node->left, listTail);
-    node->left = *listTail;
-    if(*listTail != NULL)
-        (*listTail)->right = node;
-    *listTail = node;
-    Convert(node->right, listTail);
+    ConvertRecursive(node->left, tail);
+    node->left = *tail;
+    if(*tail != NULL)
+        (*tail)->right = node;
+    *tail = node;
+    ConvertRecursive(node->right, tail);
 }
 
-TreeNode *TreeConvertToDoubleList(TreeNode *root)
+TreeNode *ConvertTreeToDoubleList(TreeNode *root)
 {
-    TreeNode *listTail = NULL;
-    Convert(root, &listTail);
-    TreeNode *listHead = listTail;
-    if(listHead != NULL)
-        while(listHead->left != NULL)
-            listHead = listHead->left;
-    return listHead;
+    if(root == NULL) return NULL;
+    TreeNode *tail = NULL;
+    ConvertRecursive(root, &tail);
+    while(root->left != NULL)
+        root = root->left;
+    return root;
 }
 
 //------------------------------------------------------------------------------
@@ -292,7 +291,7 @@ void preorderTraversal_nonrecursive(TreeNode *root)
 }
 
 //中序遍历，非递归
-void inorderTravasal_nonrecursive(TreeNode *root)
+void inorderTraversal_nonrecursive(TreeNode *root)
 {
     std::stack<TreeNode *> stk;
     TreeNode *p = root;
@@ -304,7 +303,7 @@ void inorderTravasal_nonrecursive(TreeNode *root)
             p = p->left;
         }
 
-        if(!stk.empty())
+        // if(!stk.empty())
         {
             p = stk.top();
             stk.pop();
@@ -332,10 +331,13 @@ void postorderTraversal_nonrecursive(TreeNode *root)
             prev = curr;
             stk.pop();
         }
-        else if(curr->right != NULL)
-            stk.push(curr->right);
-        else if(curr->left != NULL)
-            stk.push(curr->left);
+        else
+        {
+            if(curr->right != NULL)
+                stk.push(curr->right);
+            if(curr->left != NULL)
+                stk.push(curr->left);
+        }
     }
 }
 
@@ -463,8 +465,9 @@ TreeNode *constructCore(int *preorderStart, int *preorderEnd, int *inorderStart,
         ++inorderRoot;
     if(inorderRoot > inorderEnd)
     {
+        free(node);
         g_InvalidInput = 1;
-        return node;
+        return NULL; 
     }
 
     int leftSubtreeSize = inorderRoot - inorderStart;
@@ -568,13 +571,13 @@ int main(int argc, char *argv[])
     // inorderTraversal(root);
     // postorderTraversal(root);
     // preorderTraversal_nonrecursive(root);
-    // inorderTravasal_nonrecursive(root);
+    inorderTraversal_nonrecursive(root);
     // postorderTraversal_nonrecursive(root);
     // findTreePath(root, 18);
     // mirrorTree(root);
     // PrintTopToBottom(root);
-    int deepth = treeDeepth(root);
-    printf("deepth:%d\n", deepth);
+
+    printf("deepth:%d\n", treeDeepth(root));
 
     TreeNode *p = root->right;
     TreeNode *q = p->right;

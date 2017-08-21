@@ -7,7 +7,7 @@
 *  @FileName       : strlen.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/05 19:22:39
-*  @Last Modified  : 2017/06/05 20:08:04
+*  @Last Modified  : 2017/08/17 19:31:05
 ********************************************************************************
 */
 
@@ -16,12 +16,12 @@
 
 size_t mystrlen(const char *str)
 {
-    const char *ptr = str;
-    if(ptr == NULL)
+    if(str == NULL)
         return 0;
-    while(*ptr++ != '\0')
-        ;
-    return ptr - str - 1;
+    const char *ptr = str;
+    while(*ptr != '\0')
+        ++ptr;
+    return ptr - str;
 }
 
 int main(int argc, char *argv[])

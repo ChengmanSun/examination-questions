@@ -7,7 +7,7 @@
 *  @FileName       : subSet.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/15 13:28:24
-*  @Last Modified  : 2017/07/13 16:08:19
+*  @Last Modified  : 2017/08/17 20:21:25
 ********************************************************************************
 */
 
@@ -45,39 +45,32 @@ void SubSet(int a[], int n)
 * Note : 递归法 
 ********************************************************************************
 */
-void PrintSubSet(int a[], bool masks[], int length)
+int Recursive(int a[], bool table[], int len, int index)
 {
-    for(int i = 0; i < length; ++i)
-        if(masks[i])
-            printf("%d ", a[i]);
-    printf("\n");
-}
-
-int SubSetRecursively(int a[], bool masks[], int mask_index, int length)
-{
-    if(mask_index == length)
+    if(index == len)
     {
-        PrintSubSet(a, masks, length);
+        for(int i = 0; i < len; ++i)
+            if(table[i])
+                printf("%d ", a[i]);
+        printf("\n");
     }
     else
     {
-        masks[mask_index] = true;
-        SubSetRecursively(a, masks, mask_index+1, length);
-        masks[mask_index] = false;
-        SubSetRecursively(a, masks, mask_index+1, length);
+        table[index] = true;
+        Recursive(a, table, len, index + 1);
+        table[index] = false;
+        Recursive(a, table, len, index + 1);
     }
 }
 
-void SubSet2(int a[], int length)
+void SubSetRecursive(int a[], int len)
 {
-    if(a == NULL || length <= 0)
+    if(a == NULL || len <= 0)
         return;
-    bool *masks = new bool[length];
-    int mask_index = 0;
-    std::fill(masks, masks+length, 0);
-    // memset(masks, 0, sizeof(sizeof(bool)*length));
-    SubSetRecursively(a, masks, mask_index, length);
-    delete []masks;
+    bool *table = (bool *)malloc(sizeof(bool) * len);
+    memset(table, 0, sizeof(bool) * len);
+    Recursive(a, table, len, 0);
+    free(table);
 }
 
 //求一个集合的所有排序
@@ -93,22 +86,18 @@ void Permutation(int a[], int length, int start)
     {
         for(int i = start; i < length; ++i)
         {
-            int temp = a[i];
-            a[i] = a[start];
-            a[start] = temp;
+            std::swap(a[start], a[i]);
             Permutation(a, length, start+1);
-            temp = a[i];
-            a[i] = a[start];
-            a[start] = temp;
+            std::swap(a[start], a[i]);
         }
     }
 }
 
-void SetPermutation(int a[], int n)
+void SetPermutation(int a[], int length)
 {
-    if(a == NULL || n <= 0)
+    if(a == NULL || length <= 0)
         return;
-    Permutation(a, n, 0);
+    Permutation(a, length, 0);
 }
 
 int main(int argc, char *argv[])
@@ -116,7 +105,7 @@ int main(int argc, char *argv[])
     int a[] = {1, 2, 3, 4};
     SubSet(a, sizeof(a)/sizeof(a[0]));
     printf("---------------------------------------------------------\n");
-    SubSet2(a, sizeof(a)/sizeof(a[0]));
+    SubSetRecursive(a, sizeof(a)/sizeof(a[0]));
     printf("---------------------------------------------------------\n");
     SetPermutation(a, sizeof(a)/sizeof(a[0]));
 

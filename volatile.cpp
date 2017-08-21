@@ -7,13 +7,13 @@
 *  @FileName       : volatile.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/20 17:42:52
-*  @Last Modified  : 2017/07/05 10:55:39
+*  @Last Modified  : 2017/08/18 13:29:48
 ********************************************************************************
 */
 
 #include <stdio.h>
 #include <thread>
-#include <windows.h>
+// #include <windows.h>
 #include <unistd.h>
 
 /*
@@ -31,13 +31,14 @@
  * 变量必须定义成volatile变量。
  */
 
+// volatile bool flag = false;
 bool flag = false;
 
 void thread1_process(void)
 {
     while(1)
     {
-        sleep(500);
+        usleep(1);
         flag = !flag;
     }
 }
@@ -46,8 +47,9 @@ void thread2_process(void)
 {
     while(1)
     {
-        sleep(100);
-        printf("flag:%d", flag);
+        usleep(2);
+        printf("flag:%d\n", flag);
+        fflush(stdout);
     }
 }
 
@@ -58,13 +60,11 @@ int main(int argc, char *argv[])
     XByte[1] = 0x36;
     XByte[2] = 0x3f;
 
-    /*
-     * std::thread thread1(thread1_process);
-     * std::thread thread2(thread2_process);
-     * thread1.detach();
-     * thread2.detach();
-     * while(1)
-     *     ;
-     */
+    std::thread thread1(thread1_process);
+    std::thread thread2(thread2_process);
+    thread1.detach();
+    thread2.detach();
+    while(1)
+        ;
     return 0;
 }

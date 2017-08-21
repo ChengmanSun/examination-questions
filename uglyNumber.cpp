@@ -7,7 +7,7 @@
 *  @FileName       : uglyNumber.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/15 21:02:18
-*  @Last Modified  : 2017/07/15 16:07:40
+*  @Last Modified  : 2017/08/17 21:30:31
 ********************************************************************************
 */
 
@@ -29,18 +29,16 @@ bool isUgly(int number)
     return number == 1;
 }
 
-int getUglyNumber(int index)
+int getUglyNumber(int total)
 {
-    if(index <= 0)
-        return 0; 
-    int count = 0;
-    int number = 1;
-    while(count < index)
+    for(int i = 2, cnt = 0; cnt < total; ++i)
     {
-        if(isUgly(number++))
-            ++count;
+        if(isUgly(i))
+        {
+            printf("%d\n", i);
+            ++cnt;
+        }
     }
-    return number - 1;
 }
 
 //用空间换时间方法

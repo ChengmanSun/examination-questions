@@ -7,7 +7,7 @@
 *  @FileName       : 等差数组的排序算法.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/07/02 15:20:22
-*  @Last Modified  : 2017/07/02 15:44:34
+*  @Last Modified  : 2017/08/18 14:43:08
 ********************************************************************************
 */
 
@@ -28,16 +28,24 @@ void sort(int a[], int n)
     if(a == NULL || n <= 0)
         return;
     
-    for(int i = 0; i < n;)
+    for(int i = 0; i < n; ++i)
     {
-        int index = a[i] - 1;   //数值减一即为这个数值在排序中的位置。
-        if(index != i)          //如果数值不在它应该所处的位置上，则交换到它应该处的位置上。
+        while(a[i] - 1 != i) //如果数值不在它应该所处的位置上，则交换到它应该处的位置上。
         {
-            int temp = a[index];
-            a[index] = a[i];
-            a[i] = temp;
+            int value = a[i];
+            int valueIndex = value - 1; //数值减一即为这个数值在排序中的位置。
+            a[i] = a[valueIndex];
+            a[valueIndex] = value;
         }
-        else
-            ++i;                //只有当前位置存放了正确的数字才继续判断下一个位置上的数值。
     }
+}
+
+int main(int argc, char *argv[])
+{
+    int a[] = {1, 3, 2, 5, 6, 4, 8, 9, 7, 10};
+    sort(a, sizeof(a)/sizeof(a[0]));
+    for(unsigned i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
+        printf("%d ", a[i]);
+    printf("\n");
+    return 0;
 }

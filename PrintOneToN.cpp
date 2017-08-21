@@ -7,7 +7,7 @@
 *  @FileName       : PrintToMaxOfDigits.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/12 19:19:06
-*  @Last Modified  : 2017/08/15 16:05:21
+*  @Last Modified  : 2017/08/17 17:25:37
 ********************************************************************************
 */
 
@@ -22,7 +22,7 @@ void recursive(int num[], int n, int index)
     {
         int i = 0;
         while(i < n && num[i] == 0) ++i;
-        while(i < n) printf("%d", num[i]);
+        while(i < n) printf("%d", num[i++]);
         printf("\n");
     }
     else
@@ -37,12 +37,9 @@ void recursive(int num[], int n, int index)
 
 void printOneToN(int n)
 {
+    if(n < 1) return;
     int *num = (int *)malloc(sizeof(int) * n);
-    for(int i = 0; i < 10; ++i)
-    {
-        num[0] = i;
-        recursive(num, n, 1);
-    }
+    recursive(num, n, 0);
     free(num);
 }
 

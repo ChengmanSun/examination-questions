@@ -7,9 +7,11 @@
 *  @FileName       : 数组元素求值.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/07/02 14:36:24
-*  @Last Modified  : 2017/07/02 15:16:22
+*  @Last Modified  : 2017/08/18 16:58:46
 ********************************************************************************
 */
+
+#include <stdio.h>
 
 /*
  * 数组a[N]，存放了1至N-1个元素，其中有一个数重复了一次。写个函数求出这个重复的数字，
@@ -27,9 +29,17 @@
 
 int do_dup(int a[], int N)
 {
-    int s = N * (N - 1) / 2; //求去掉重复数字后的等差弟增数组的和。
     int sum = 0;
     for(int i = 0; i < N; ++i)
         sum += a[i];        //求原数组的和。
+    int s = (a[0] + a[N - 1]) * (N - 1) / 2; //求去掉重复数字后的等差弟增数组的和。
     return sum - s;
+}
+
+int main(int argc, char *argv[])
+{
+    int a[] = {1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 10};
+    int repeat = do_dup(a, sizeof(a)/sizeof(a[0]));
+    printf("%d\n", repeat);
+    return 0;
 }
