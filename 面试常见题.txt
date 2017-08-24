@@ -623,3 +623,12 @@ int *p = a;
 如果一棵具有n个结点的二叉树的结构与满二叉树的前n个结点的结构相同，这样的二叉树称为完全二叉树。
 
 面向对像的4个要素：抽像、封装、继承、多态
+
+题：请写一个函数求本地字节序
+答：typedef enum{big_endian, little_endian} ENDIAN;
+ENDIAN localEndian(void)
+{
+    int i = 1;
+    return *(char *)&i == 1 ? little_endian : big_endian;
+    /* return (ENDIAN)*(char *)&i; */
+}

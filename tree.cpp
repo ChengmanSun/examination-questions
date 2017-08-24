@@ -7,7 +7,7 @@
 *  @FileName       : tree.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/21 12:59:10
-*  @Last Modified  : 2017/08/20 14:55:50
+*  @Last Modified  : 2017/08/24 11:44:35
 ********************************************************************************
 */
 
@@ -110,11 +110,8 @@ bool VerifySequenceOfPostorder(int sequence[], int length)
     int root = sequence[length-1];
     //在二叉搜索树中左子树的结点小于根节点
     int i = 0;
-    for(; i < length - 1; ++i)
-    {
-        if(sequence[i] > root)
-            break;
-    }
+    while(i < length - 1 && sequence[i] < root)
+        ++i;
     //在二叉搜索树中右子树的结点大于根节点
     int j = i;
     for(; j < length - 1; ++j)
@@ -302,14 +299,10 @@ void inorderTraversal_nonrecursive(TreeNode *root)
             stk.push(p);
             p = p->left;
         }
-
-        // if(!stk.empty())
-        {
-            p = stk.top();
-            stk.pop();
-            printf("%d\n", p->data);
-            p = p->right;
-        }
+        p = stk.top();
+        stk.pop();
+        printf("%d\n", p->data);
+        p = p->right;
     }
 }
 
@@ -320,23 +313,23 @@ void postorderTraversal_nonrecursive(TreeNode *root)
         return;
     std::stack<TreeNode *> stk;
     stk.push(root);
-    TreeNode *prev = NULL;
+    TreeNode *prevNode = NULL;
     while(!stk.empty())
     {
-        TreeNode *curr = stk.top();
-        if((curr->left == NULL && curr->right == NULL) ||
-            (prev != NULL && (curr->left == prev || curr->right == prev)))
+        TreeNode *temp = stk.top();
+        if((temp->left == NULL && temp->right == NULL) ||
+            (prevNode != NULL && (temp->left == prevNode || temp->right == prevNode)))
         {
-            printf("%d\n", curr->data);
-            prev = curr;
             stk.pop();
+            prevNode = temp;
+            printf("%d\n", temp->data);
         }
         else
         {
-            if(curr->right != NULL)
-                stk.push(curr->right);
-            if(curr->left != NULL)
-                stk.push(curr->left);
+            if(temp->right != NULL)
+                stk.push(temp->right);
+            if(temp->left != NULL)
+                stk.push(temp->left);
         }
     }
 }
@@ -402,8 +395,10 @@ Node *commonAncestor(Node *root, Node *p, Node *q)
 void nodeMapParent(TreeNode *root, std::map<TreeNode*, TreeNode *> &mp)
 {
     if(root == NULL) return;
-    mp[root->left] = root;
-    mp[root->right] = root;
+    if(root->left != NULL)
+        mp[root->left] = root;
+    if(root->right != NULL)
+        mp[root->right] = root;
     nodeMapParent(root->left, mp);
     nodeMapParent(root->right, mp);
 }
@@ -419,6 +414,9 @@ TreeNode *_commonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
         ++p_len;
     for(q_tmp = q; mp.find(q_tmp) != mp.end(); q_tmp = mp.find(q_tmp)->second)
         ++q_len;
+    //检查p和q是否在树中
+    if(p_tmp != root || q_tmp != root || p_tmp != q_tmp)
+        return NULL;
 
     while(p_len > q_len)
     {
