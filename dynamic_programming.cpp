@@ -7,7 +7,7 @@
 *  @FileName       : dynamic_programming.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/07/23 11:37:35
-*  @Last Modified  : 2017/08/11 21:40:38
+*  @Last Modified  : 2017/08/25 20:46:25
 ********************************************************************************
 */
 
@@ -147,6 +147,48 @@ int maxContinueSubArray(int a[], int n)
     return max;
 }
 
+//求最大共公子序列
+
+//求最大回字符串
+int palindrome(const char *str)
+{
+    if(str == NULL) return 0;
+    int len = strlen(str);
+    bool *dp = (bool *)malloc(sizeof(bool) * len * len);
+    for(int i = 0; i < len; ++i)
+        dp[len*i + i] = true;
+    int maxSubPalindrome = 1;
+    for(int i = 1; i < len; ++i)
+    {
+        for(int j = i - 1; j >= 0; --j)
+        {
+            //判断j~i之间的子串是否是回文字符串
+            bool subStrIsPlindrome = i - 1 < j + 1 ? true : dp[len * (j + 1) + (i - 1)];
+            dp[len * j + i] = subStrIsPlindrome && (str[i] == str[j]);
+            if(dp[len * j + i] == true)
+                maxSubPalindrome = std::max(maxSubPalindrome, i - j + 1);
+        }
+    }
+/*
+ *     for(int i = 0; i < len; ++i)
+ *     {
+ *         for(int j = 0; j < i; ++j)
+ *         {
+ *             if(dp[len * j + i] == true && (i - j + 1 == maxSubPalindrome))
+ *             {
+ *                 while(j <= i)
+ *                     printf("%c", str[j++]);
+ *                 printf("\n");
+ *                 goto out;
+ *             }
+ *         }
+ *     }
+ * out:
+ */
+    free(dp);
+    return maxSubPalindrome;
+}
+
 int main(int argc, char *argv[])
 {
     int array[] = {1, 5, 2, 6, -1, 7, 8};
@@ -154,5 +196,8 @@ int main(int argc, char *argv[])
 
     int array1[] = {-3, 1, -3, 4, -1, 2, 1};
     printf("%d\n", maxContinueSubArray(array1, sizeof(array1)/sizeof(array1[0])));
+
+    char palindromeStr[] = "labcdedcbafg";
+    printf("palindrome: %d\n", palindrome(palindromeStr));
     return 0;
 }
