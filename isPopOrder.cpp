@@ -7,7 +7,7 @@
 *  @FileName       : isPopOrder.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/13 21:01:06
-*  @Last Modified  : 2017/08/14 16:30:58
+*  @Last Modified  : 2017/08/24 14:45:00
 ********************************************************************************
 */
 
@@ -17,30 +17,32 @@
 #include <stdio.h>
 #include <stack>
 
-bool isPopOrder(int pushSequence[], int popSequence[], int length)
-{
-    int pushIndex = 0, popIndex = 0;
-    std::stack<int> stk;
-
-    if(pushSequence == NULL || popSequence == NULL || length < 1)
-        return false;
-
-    while(popIndex < length)
-    {
-        while(stk.empty() || stk.top() != popSequence[popIndex])
-        {
-            stk.push(pushSequence[pushIndex++]);
-            if(pushIndex == length)
-                break;
-        }
-        if(stk.top() != popSequence[popIndex])
-            break;
-        stk.pop();
-        popIndex++;
-    }
-
-    return stk.empty() && popIndex == length;
-}
+/*
+ * bool isPopOrder(int pushSequence[], int popSequence[], int length)
+ * {
+ *     int pushIndex = 0, popIndex = 0;
+ *     std::stack<int> stk;
+ * 
+ *     if(pushSequence == NULL || popSequence == NULL || length < 1)
+ *         return false;
+ * 
+ *     while(popIndex < length)
+ *     {
+ *         while(stk.empty() || stk.top() != popSequence[popIndex])
+ *         {
+ *             stk.push(pushSequence[pushIndex++]);
+ *             if(pushIndex == length)
+ *                 break;
+ *         }
+ *         if(stk.top() != popSequence[popIndex])
+ *             break;
+ *         stk.pop();
+ *         popIndex++;
+ *     }
+ * 
+ *     return stk.empty() && popIndex == length;
+ * }
+ */
 
 bool isPopOrder(int pushSequence[], int popSequence[], int length)
 {
