@@ -7,7 +7,7 @@
 *  @FileName       : dynamic_programming.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/07/23 11:37:35
-*  @Last Modified  : 2017/08/25 20:46:25
+*  @Last Modified  : 2017/08/25 23:59:47
 ********************************************************************************
 */
 
@@ -155,38 +155,35 @@ int palindrome(const char *str)
     if(str == NULL) return 0;
     int len = strlen(str);
     bool *dp = (bool *)malloc(sizeof(bool) * len * len);
+    int maxLen = 1;         //最大回文子串的长度
+    int maxSubStrBegin = 0; //最大回文子串的起始位置
+    //每个字符都是一个回文字串
     for(int i = 0; i < len; ++i)
         dp[len*i + i] = true;
-    int maxSubPalindrome = 1;
     for(int i = 1; i < len; ++i)
     {
         for(int j = i - 1; j >= 0; --j)
         {
             //判断j~i之间的子串是否是回文字符串
-            bool subStrIsPlindrome = i - 1 < j + 1 ? true : dp[len * (j + 1) + (i - 1)];
-            dp[len * j + i] = subStrIsPlindrome && (str[i] == str[j]);
+            //如果j和i相邻则不存在内部子串，只需要判断str[j]和str[i]是否相等
+            bool subStrIsPlindrome = (j == i-1) ? true : dp[len * (j + 1) + (i - 1)];
+            //如果str[j]等于str[i]且它们的内部子串是回文字符串，则j~i子串是回文字串
+            dp[len * j + i] = (str[i] == str[j]) && subStrIsPlindrome;
             if(dp[len * j + i] == true)
-                maxSubPalindrome = std::max(maxSubPalindrome, i - j + 1);
+            {
+                if(maxLen < i - j + 1)
+                {
+                    maxLen = i - j + 1;
+                    maxSubStrBegin = j;
+                }
+            }
         }
     }
-/*
- *     for(int i = 0; i < len; ++i)
- *     {
- *         for(int j = 0; j < i; ++j)
- *         {
- *             if(dp[len * j + i] == true && (i - j + 1 == maxSubPalindrome))
- *             {
- *                 while(j <= i)
- *                     printf("%c", str[j++]);
- *                 printf("\n");
- *                 goto out;
- *             }
- *         }
- *     }
- * out:
- */
+    for(int i = 0; i < maxLen; ++i)
+        printf("%c", str[maxSubStrBegin+i]);
+    printf("\n");
     free(dp);
-    return maxSubPalindrome;
+    return maxLen;
 }
 
 int main(int argc, char *argv[])
