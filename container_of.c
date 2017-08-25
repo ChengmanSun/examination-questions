@@ -7,7 +7,7 @@
 *  @FileName       : container_of.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/08/25 14:03:59
-*  @Last Modified  : 2017/08/25 14:34:06
+*  @Last Modified  : 2017/08/26 00:37:42
 ********************************************************************************
 */
 
@@ -32,5 +32,8 @@ int main(int argc, char *argv[])
     printf("%p\n", pb);
     printf("%p\n", &(((ContainerTest *)0)->b));
     printf("%p\n", pCon);
+    printf("a: %d\n", pCon->a);
+    printf("b: %d\n", pCon->b);
+    printf("c: %d\n", pCon->c);
     return 0;
 }
