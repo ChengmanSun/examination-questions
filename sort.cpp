@@ -7,7 +7,7 @@
 *  @FileName       : sort.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/16 16:00:12
-*  @Last Modified  : 2017/08/13 16:44:36
+*  @Last Modified  : 2017/08/26 14:51:22
 ********************************************************************************
 */
 
@@ -89,7 +89,7 @@ void InsertSort(int a[], int n)
         {
             int temp = a[i];                        //temp为要插入的数据
             int j = i-1;
-            for(; j >= 0 && a[j+1] < a[j]; j -= 1)
+            for(; j >= 0 && temp < a[j]; j -= 1)
                 a[j+1] = a[j];
             a[j+1] = temp;                          //插入数据
         }
@@ -125,7 +125,7 @@ static void ShellInsert(int a[], int n, int k, bool (*compare)(int, int))
         {
             int temp = a[i];
             int j = i-k;
-            for(; j >= 0 && compare(a[j+k], a[j]); j -= k)
+            for(; j >= 0 && compare(temp, a[j]); j -= k)
                 a[j+k] = a[j];
             a[j+k] = temp;
         }
@@ -411,7 +411,7 @@ void MergeSort(int a[], int n)
 
 //------------------------------------------------------------------------------
 
-#define SIZE 1000000
+#define SIZE 10000
 int main(int argc, char *argv[])
 {
     (void)argc;
@@ -431,13 +431,13 @@ int main(int argc, char *argv[])
     // InsertSort2(array, SIZE); 
     // ShellSort(array, SIZE, [](int a, int b)->bool{return a < b;}); 
     // ShellSort2(array, SIZE, [](int a, int b)->bool{return a < b;}); 
-    // QuickSort(array, 0, SIZE - 1, [](int a, int b)->int{return a - b;});
+    QuickSort(array, 0, SIZE - 1, [](int a, int b)->int{return a - b;});
     // QuickSort(array, SIZE, [](int a, int b)->int{return a - b;});
-    QuickSort2(array, 0, SIZE - 1, [](int a, int b)->bool{return a < b;});
+    // QuickSort2(array, 0, SIZE - 1, [](int a, int b)->bool{return a < b;});
     // MergeSort(array, SIZE);
     // HeapSort(array, SIZE);
     // qsort(array1, SIZE, sizeof(int), [](const void*d1, const void*d2)->int{return *(int *)d1 - *(int *)d2;});
-    // std::sort(array1, array1+SIZE, std::less<int>());
+    std::sort(array1, array1+SIZE, std::less<int>());
     clock_t end = clock(); 
     printf("time ms:%ld\n", end - begin);
 
