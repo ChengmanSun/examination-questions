@@ -7,7 +7,7 @@
 *  @FileName       : tree.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/21 12:59:10
-*  @Last Modified  : 2017/08/24 11:44:35
+*  @Last Modified  : 2017/08/31 16:31:09
 ********************************************************************************
 */
 
@@ -43,7 +43,7 @@ bool isTree1HasTree2(TreeNode *root1, TreeNode *root2)
         return false;
     if(root1->data != root2->data)
         return false;
-    return isTree1HasTree2(root1->left, root2->left) && isTree1HasTree2(root1->right, root2->right);
+    return isTree1HasTree2(root1->left, root2->left) || isTree1HasTree2(root1->right, root2->right);
 }
 
 //前序遍历树1，对树1的每个节点查看是否有子树2。
