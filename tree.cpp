@@ -7,7 +7,7 @@
 *  @FileName       : tree.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/21 12:59:10
-*  @Last Modified  : 2017/08/31 16:31:09
+*  @Last Modified  : 2017/09/01 16:43:28
 ********************************************************************************
 */
 
@@ -103,28 +103,28 @@ void PrintTopToBottom(TreeNode *root)
 
 //verify:证明、判定
 
-bool VerifySequenceOfPostorder(int sequence[], int length)
+bool VerifySequenceOfPostorder(int seq[], int n)
 {
-    if(sequence == NULL || length <= 0)
+    if(seq == NULL || n <= 0)
         return false;
-    int root = sequence[length-1];
+    int root = seq[n-1];
     //在二叉搜索树中左子树的结点小于根节点
     int i = 0;
-    while(i < length - 1 && sequence[i] < root)
+    while(i < n - 1 && seq[i] < root)
         ++i;
     //在二叉搜索树中右子树的结点大于根节点
     int j = i;
-    for(; j < length - 1; ++j)
+    for(; j < n - 1; ++j)
     {
-        if(sequence[j] < root)
+        if(seq[j] < root)
             return false;
     }
 
     bool left = true, right = true;
     if(i > 0)           //大于0说明存在左子树
-        left = VerifySequenceOfPostorder(sequence, i);
-    if(i < length - 1)  //i小于length-1说明存在右子树
-        right = VerifySequenceOfPostorder(sequence + i, length - i - 1);
+        left = VerifySequenceOfPostorder(seq, i);
+    if(i < n - 1)  //i小于n-1说明存在右子树
+        right = VerifySequenceOfPostorder(seq + i, n - i - 1);
     return left && right;
 }
 
@@ -133,36 +133,34 @@ bool VerifySequenceOfPostorder(int sequence[], int length)
 //输入一棵二叉树和一个整数，打印出二叉树中结点的值为输入整数的所有路径。从树的根
 //结点往下一直到叶子结点所经过的结点形成一条路径。
 
-void findPathRecursive(TreeNode *node, std::vector<TreeNode *> &path, int &currsum, int sum)
+void findPathRecursive(TreeNode *node, std::vector<TreeNode *> &path, int &sum, int key)
 {
     if(node == NULL)
         return;
-    currsum += node->data;
-    //判断当前节点是否是叶子节点
-    bool isLeaf = node->left == NULL && node->right == NULL;
+    sum += node->data;
     path.push_back(node);
-    if(currsum == sum && isLeaf)
+    //如果当前值与key相等，且节点是叶子节点
+    if(sum == key && node->left == NULL && node->right == NULL)
     {
-        // for(std::vector<TreeNode *>::iterator iter = path.begin(); iter != path.end(); ++iter)
         for(std::vector<TreeNode *>::size_type i = 0; i < path.size(); ++i) 
             printf("%d ", path[i]->data);
         printf("\n");
     }
     //如果不是叶子结节点则遍历它的子结点
-    findPathRecursive(node->left, path, currsum, sum);
-    findPathRecursive(node->right, path, currsum, sum);
-    //返回到父结点之前，在路径上删除当前结点，并减去当前值。
-    currsum -= node->data;
+    findPathRecursive(node->left, path, sum, key);
+    findPathRecursive(node->right, path, sum, key);
+    //返回到父结点之前，在路径上删除当前结点，并减去节点值。
+    sum -= node->data;
     path.pop_back();
 }
 
-void findTreePath(TreeNode *root, int sum)
+void findTreePath(TreeNode *root, int key)
 {
     if(root == NULL)
         return;
     std::vector<TreeNode *> path;
-    int currsum = 0;
-    findPathRecursive(root, path, currsum, sum);
+    int sum = 0;
+    findPathRecursive(root, path, sum, key);
 }
 
 //------------------------------------------------------------------------------
