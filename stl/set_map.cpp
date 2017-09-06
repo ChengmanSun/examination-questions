@@ -7,7 +7,7 @@
 *  @FileName       : set_map.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/06/29 15:51:31
-*  @Last Modified  : 2017/06/30 10:00:54
+*  @Last Modified  : 2017/09/06 10:25:55
 ********************************************************************************
 */
 
@@ -27,7 +27,7 @@
 //count(T &key):        // 查找key在multiset和multimap中的数量
 //find(T &key):         // (==) 查找第一个等于key的元素
 //lower_bound(T &key):  // (>=) 查找大于等于key的第一个元素，返回其迭代器。
-//upper_bound(T &key):  // (<) 查找大于key的第一个元素，返回其它迭代器。
+//upper_bound(T &key):  // (<) 查找大于key的第一个元素，返回其迭代器。
 //equal_bound(T &key):  // (>= && <) 大于等于key的第一个元素的迭代器，和大于key的第一个元素的迭代器组成一个组。返回这个迭代器组。
 
 typedef std::pair<int, std::string> CustomPair;

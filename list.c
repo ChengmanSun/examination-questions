@@ -7,7 +7,7 @@
 *  @FileName       : list.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/15 13:58:12
-*  @Last Modified  : 2017/07/19 10:29:14
+*  @Last Modified  : 2017/09/05 20:59:17
 ********************************************************************************
 */
 
@@ -64,37 +64,13 @@ void ListRemoveNode(ListNode **head, int value)
     }
 }
 
-void ListSort(ListNode *head)
-{
-    ListNode *p = head, *q;
-    if(head == NULL)
-        return;
-    while(p->next != NULL)
-    {
-        q = p->next;
-        while(q != NULL)
-        {
-            if(p->data > q->data)
-            {
-                p->data ^= q->data;
-                q->data ^= p->data;
-                p->data ^= q->data;
-            }
-            q = q->next;
-        }
-        p = p->next;
-    }
-}
-
 /*
 ********************************************************************************
 * Note : 反转链表方法一 
 ********************************************************************************
 */
-ListNode *ListReverse(ListNode *head)
+ListNode *ListReverse1(ListNode *head)
 {
-    if(head == NULL)
-        return NULL;
     ListNode *prev = NULL, *curr = head;
     while(curr != NULL)
     {
@@ -111,115 +87,79 @@ ListNode *ListReverse(ListNode *head)
 * Note : 反转链表方法二 
 ********************************************************************************
 */
-/*
- * ListNode *ListReverse(ListNode *head)
- * {
- *     ListNode *reverseList = NULL;
- *     while(head != NULL)
- *     {
- *         ListNode *temp = head;
- *         head = head->next;
- *         temp->next = reverseList;
- *         reverseList = temp;
- *     }
- *     return reverseList;
- * }
- */
+ListNode *ListReverse2(ListNode *head)
+{
+    ListNode *reverseList = NULL;
+    while(head != NULL)
+    {
+        ListNode *temp = head;
+        head = head->next;
+        temp->next = reverseList;
+        reverseList = temp;
+    }
+    return reverseList;
+}
 
 /*
 ********************************************************************************
 * Note : 反转链表方法三 
 ********************************************************************************
 */
-ListNode *ListReverse(ListNode *head, ListNode **reverselist)
+ListNode *ListReverse3(ListNode *head, ListNode **newlist)
 {
-    ListNode *note;
-    if(head == NULL || reverselist == NULL)
-        return NULL;
-    note = ListReverse(head->next, reverselist);
-    if(note != NULL)
-        note->next = head;
+    if(head == NULL || newlist == NULL) return NULL;
+    ListNode *prevNote = ListReverse3(head->next, newlist);
+    if(prevNote == NULL)
+        *newlist = head;
     else
-        *reverselist = head;
-    head->next = NULL;
+        prevNote->next = head;
+    head->next = NULL; //必须将head->next设置成NULL，否则最后会死循环
     return head;
 }
 
 //合并两个升序链表 方法一
-ListNode *ListMerge(ListNode *node1, ListNode *node2)
+ListNode *ListMerge1(ListNode *node1, ListNode *node2)
 {
-    if(node1 == node2)
-        return node1;
-    if(node1 == NULL)
-        return node2;
-    if(node2 == NULL)
-        return node1;
+    if(node1 == node2) return node1;
+    if(node1 == NULL) return node2;
+    if(node2 == NULL) return node1;
     ListNode *less = NULL;
     if(node1->data < node2->data)
     {
         less = node1;
-        less->next = ListMerge(node1->next, node2);
+        less->next = ListMerge1(node1->next, node2);
     }
     else
     {
         less = node2;
-        less->next = ListMerge(node1, node2->next);
+        less->next = ListMerge1(node1, node2->next);
     }
     return less;
 }
 
 //合并两个升序链表 方法二
-ListNode *merge(ListNode *node1, ListNode *node2)
+ListNode *ListMerge2(ListNode *list1, ListNode *list2)
 {
-    if(node1 == NULL || node2 == NULL)
-        return NULL;
-    if(node1 == node2)
-        return node1;
-    ListNode *mergeList = NULL;
-    ListNode **tail = &mergeList;
-    while(node1 != NULL && node2 != NULL)
+    if(list1 == list2) return list1;
+    ListNode *newList = NULL, **tail = &newList;
+    while(list1 != NULL && list2 != NULL)
     {
-        if(node1->data < node2->data)
+        if(list1->data < list2->data)
         {
-            *tail = node1;
-            node1 = node1->next;
+            *tail = list1;
+            list1 = list1->next;
         }
         else
         {
-            *tail = node2;
-            node2 = node2->next;
+            *tail = list2;
+            list2 = list2->next;
         }
-        tail = &(*tail)->next;
+        tail = &((*tail)->next);
     }
-    if(node1 != NULL)
-        *tail = node1;
-    if(node2 != NULL)
-        *tail = node2;
-    return mergeList;
+    if(list1 != NULL) *tail = list1;
+    if(list2 != NULL) *tail = list2;
+    return newList;
 }
-
-//合并两个降序链表
-/*
- * ListNode *ListMerge(ListNode *h1, ListNode *h2)
- * {
- *     ListNode *list = NULL;
- *     if(h1 == NULL)
- *         return h2;
- *     if(h2 == NULL)
- *         return h1;
- *     if(h1->data > h2->data)
- *     {
- *         list = h1;
- *         list->next = ListMerge(h1->next, h2); 
- *     }
- *     else
- *     {
- *         list = h2;
- *         list->next = ListMerge(h1, h2->next);
- *     }
- *     return list;
- * }
- */
 
 void ListShow(ListNode *head)
 {
@@ -264,7 +204,7 @@ ListNode *ListFindMiddle(ListNode *head)
 *        快指针遇到慢指针则链表有环。
 ********************************************************************************
 */
-int ListHasCircle(ListNode *head)
+int ListHasCycle(ListNode *head)
 {
     ListNode *fast = head, *slow = head;
     while(fast != NULL && fast->next != NULL)
@@ -283,7 +223,7 @@ int ListHasCircle(ListNode *head)
 *        从相遇点开始慢指针不动，快指针再走一圈，再次相遇时快指针走过的距离为环的长度。
 ********************************************************************************
 */
-int circlyLength(ListNode *head)
+int cycleLength(ListNode *head)
 {
     ListNode *fast = head, *slow = head;
     while(fast != NULL && fast->next != NULL)
@@ -351,9 +291,9 @@ int loopListLength(ListNode *head)
             break;
     }
 
-    //返回无环链表的长度
-    if(fast == NULL || fast->next == NULL)
-        return len;
+    //如果无环，则返回无环链表的长度
+    if(fast == NULL) return 2*len;
+    if(fast->next == NULL) return 2*len + 1;
 
     //求环的长度：从相遇点开始，慢指针不动，快指针走一圈，直到碰到慢指针。
     len = 1;
@@ -409,42 +349,96 @@ ListNode *findFistCommonNode(ListNode *head1, ListNode *head2)
     return longList;
 }
 
+/*
+********************************************************************************
+* Note : 使用并归法排序链表 
+********************************************************************************
+*/
+ListNode *splitMiddle(ListNode *head)
+{
+    if(head == NULL) return NULL;
+    ListNode *fast = head, *slow = head;
+    while(fast != NULL && fast->next != NULL)
+    {
+        fast = fast->next->next;
+        //当链表只有两个节点时，最终slow应该指向第一个节点。
+        //这样就能将只有两个节点的链表拆分成两个分别有一个节点的链表。
+        if(fast != NULL)
+            slow = slow->next;
+    }
+    ListNode *newlist = slow->next; 
+    slow->next = NULL;
+    return newlist;
+}
+
+ListNode *mergeSort(ListNode *head)
+{
+    if(head == NULL) return NULL;
+    //必须，否则如果一个链表只有一个节点时，总是能拆分成一个NULL，和只有一个节点的链表，结果就会死循环无限拆分
+    if(head->next == NULL) return head;
+
+    ListNode *list1 = head;
+    ListNode *list2 = splitMiddle(head);
+    list1 = mergeSort(list1);
+    list2 = mergeSort(list2);
+    ListNode *newlist = NULL, **tail = &newlist;
+    while(list1 != NULL && list2 != NULL)
+    {
+        if(list1->data < list2->data)
+        {
+            *tail = list1;
+            list1 = list1->next;
+        }
+        else
+        {
+            *tail = list2;
+            list2 = list2->next;
+        }
+        tail = &((*tail)->next);
+    }
+    if(list1 != NULL) *tail = list1;
+    if(list2 != NULL) *tail = list2;
+    return newlist;
+}
+
 int main(int argc, char *argv[])
 {
-    ListNode *head = NULL, *head1 = NULL, *head2 = NULL, *newlist = NULL;
+    ListNode *list = NULL, *list1 = NULL, *list2 = NULL;
     int data[] = {1, 9, 3, 7, 2, 4, 10, 6, 8, 5};
     int data1[] = {1, 3, 4, 9, 10};
     int data2[] = {0, 5, 2, 8, 7, 6};
     for(unsigned i = 0; i < sizeof(data)/sizeof(int); i++)
     {
-        ListAddToTail(&head, data[i]);
+        ListAddToTail(&list, data[i]);
         if(i < sizeof(data1)/sizeof(int))
-            ListAddToFront(&head1, data1[i]);
+            ListAddToFront(&list1, data1[i]);
         if(i < sizeof(data2)/sizeof(int))
-            ListAddToFront(&head2, data2[i]);
+            ListAddToFront(&list2, data2[i]);
     }
 
-    ListSort(head);
-    ListSort(head1);
-    ListSort(head2);
+    list = mergeSort(list);
+    list1 = mergeSort(list1);
+    list2 = mergeSort(list2);
+    ListShow(list);
+    ListShow(list1);
+    ListShow(list2);
 
-    ListShow(head);
-    ListShow(head1);
-    ListShow(head2);
+    list = ListReverse1(list);
+    /* list = ListReverse2(list); */
+    /* ListNode *reverse; */
+    /* ListReverse3(list, &reverse); */
+    ListShow(list);
+    ListRemoveNode(&list, 1);
+    ListRemoveNode(&list, 5);
+    ListShow(list);
 
-    head = ListReverse(head);
-    /* ListReverse(head, &reverselist); */
-    /* Show(reverselist); */
-    ListRemoveNode(&head, 1);
-    ListRemoveNode(&head, 5);
-    ListShow(head);
+    ListNode *middle = ListFindMiddle(list);
+    printf("middle of list: %d\n", middle->data);
 
-    ListNode *middle = ListFindMiddle(head);
-    printf("middle of head: %d\n", middle->data);
-
-    newlist = ListMerge(head1, head2);
-    printf("merge head1 head2: ");
-    ListShow(newlist);
+    /* ListNode *mergeList = ListMerge1(list1, list2); */
+    ListNode *mergeList = ListMerge2(list1, list2);
+    printf("merge list1 list2: ");
+    ListShow(mergeList);
 
     return 0;
 }

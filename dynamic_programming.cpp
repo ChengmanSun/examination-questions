@@ -7,7 +7,7 @@
 *  @FileName       : dynamic_programming.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/07/23 11:37:35
-*  @Last Modified  : 2017/08/25 23:59:47
+*  @Last Modified  : 2017/09/06 17:45:10
 ********************************************************************************
 */
 
@@ -147,7 +147,79 @@ int maxContinueSubArray(int a[], int n)
     return max;
 }
 
+//求最大公共子字符串
+int LongestCommonSubstring(const char *s1, const char *s2)
+{
+    if(s1 == NULL || s2 == NULL) return 0;
+    int len1 = strlen(s1);
+    int len2 = strlen(s2);
+    if(len1 == 0 || len2 == 0) return 0;
+    int *dp = (int *)malloc(sizeof(int) * len1 * len2);
+    memset(dp, 0, sizeof(int) * len1 * len2);
+    int maxSubStrLen = 0, subStrEndIndex = 0;
+    for(int i = 0; i < len1; ++i)
+    {
+        for(int j = 0; j < len2; ++j)
+        {
+            if(s1[i] == s2[j])
+            {
+                int *subStrLen = &dp[len1 * j + i];
+                if(i > 0 && j > 0)
+                    *subStrLen = dp[len1*(j-1) + (i-1)] + 1; //当前最大子串长度为前一个子串长度加1
+                else
+                    *subStrLen = 1;
+                
+                if(*subStrLen > maxSubStrLen)
+                {
+                    maxSubStrLen = *subStrLen;
+                    subStrEndIndex = i;
+                }
+            }
+        }
+    }
+    for(int i = subStrEndIndex - maxSubStrLen + 1; i <= subStrEndIndex; ++i)
+        printf("%c", s1[i]);
+    printf("\n");
+    free(dp);
+    return maxSubStrLen;
+}
+
 //求最大共公子序列
+int LongestCommonSequence(const char *s1, const char *s2)
+{
+    if(s1 == NULL || s2 == NULL) return 0;
+    int len1 = strlen(s1);
+    int len2 = strlen(s2);
+    if(len1 == 0 || len2 == 0) return 0;
+    int *dp = (int *)malloc(sizeof(int) * len1 * len2);
+    int maxSeqLen = 0;
+    for(int i = 0; i < len1; ++i)
+    {
+        for(int j = 0; j < len2; ++j)
+        {
+            int *seqLen = &dp[len1 * j + i];
+            if(s1[i] == s2[j])
+            {
+                if(i > 0 && j > 0)
+                    *seqLen = dp[len1*(j-1) + (i-1)] + 1;
+                else
+                    *seqLen = 1;
+                
+                if(*seqLen > maxSeqLen)
+                    maxSeqLen = *seqLen;
+            }
+            else
+            {
+                if(i > 0 && j > 0)
+                    *seqLen = std::max(dp[len1*(j-1) + i], dp[len1*j + (i-1)]);
+                else
+                    *seqLen = 0;
+            }
+        }
+    }
+    free(dp);
+    return maxSeqLen;
+}
 
 //求最大回字符串
 int palindrome(const char *str)
@@ -157,7 +229,7 @@ int palindrome(const char *str)
     bool *dp = (bool *)malloc(sizeof(bool) * len * len);
     int maxLen = 1;         //最大回文子串的长度
     int maxSubStrBegin = 0; //最大回文子串的起始位置
-    //每个字符都是一个回文字串
+    //每个字符都是一个回文字符串
     for(int i = 0; i < len; ++i)
         dp[len*i + i] = true;
     for(int i = 1; i < len; ++i)
@@ -165,7 +237,7 @@ int palindrome(const char *str)
         for(int j = i - 1; j >= 0; --j)
         {
             //判断j~i之间的子串是否是回文字符串
-            //如果j和i相邻则不存在内部子串，只需要判断str[j]和str[i]是否相等
+            //如果j和i相邻，则不存在内部子串，只需要判断str[j]和str[i]是否相等
             bool subStrIsPlindrome = (j == i-1) ? true : dp[len * (j + 1) + (i - 1)];
             //如果str[j]等于str[i]且它们的内部子串是回文字符串，则j~i子串是回文字串
             dp[len * j + i] = (str[i] == str[j]) && subStrIsPlindrome;
@@ -196,5 +268,11 @@ int main(int argc, char *argv[])
 
     char palindromeStr[] = "labcdedcbafg";
     printf("palindrome: %d\n", palindrome(palindromeStr));
+
+    const char *s1 = "abcfggatlkm";
+    const char *s2 = "dcfggaelm";
+    printf("LongestCommonSubstring of \"%s\" \"%s\": %d\n", s1, s2, LongestCommonSubstring(s1, s2));
+
+    printf("LongestCommonSequence: %d\n", LongestCommonSequence(s1, s2));
     return 0;
 }
