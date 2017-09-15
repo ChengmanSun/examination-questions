@@ -7,7 +7,7 @@
 *  @FileName       : sort.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/16 16:00:12
-*  @Last Modified  : 2017/08/26 14:51:22
+*  @Last Modified  : 2017/09/15 14:59:33
 ********************************************************************************
 */
 
@@ -99,9 +99,9 @@ void InsertSort(int a[], int n)
 //------------------------------------------------------------------------------
 
 //使用了类似于冒泡排序的方法实现插入排序
-void InsertSort2(int a[], int n, int (*compare)(int, int))
+void InsertSort2(int a[], int n)
 {
-    if(a == NULL || n < 2 || compare == NULL)
+    if(a == NULL || n < 2)
         return;
 
     for(int i = 1; i < n; ++i)
@@ -119,6 +119,7 @@ void InsertSort2(int a[], int n, int (*compare)(int, int))
 
 static void ShellInsert(int a[], int n, int k, bool (*compare)(int, int))
 {
+    // for(int i = k; i < n; i += k) //这个写法是错的
     for(int i = k; i < n; ++i)
     {
         if(compare(a[i], a[i-k]))
@@ -136,7 +137,7 @@ void ShellSort(int a[], int n, bool (*compare)(int, int))
 {
     if(a == NULL || n < 2 || compare == NULL)
         return;
-    for(int k = n/2; k >= 1; k /=2)
+    for(int k = n/2; k > 0; k /=2)
         ShellInsert(a, n, k, compare);
 }
 
@@ -145,6 +146,7 @@ void ShellSort(int a[], int n, bool (*compare)(int, int))
 //效率远远低于ShellInsert
 static void ShellInsert2(int a[], int n, int k, bool (*compare)(int, int))
 {
+    // for(int i = k; i < n; i += k) //这个写法是错的
     for(int i = k; i < n; ++i)   
     {
         for(int j = i-k; j >= 0 && compare(a[j+1], a[j]); j -= k)
@@ -161,7 +163,7 @@ void ShellSort2(int a[], int n, bool (*compare)(int, int))
     if(a == NULL || n < 2 || compare == NULL)
         return;
     int k = n;
-    while((k /= 2) >= 1)
+    while((k /= 2) > 0)
         ShellInsert2(a, n, k, compare);
 }
 
@@ -429,9 +431,9 @@ int main(int argc, char *argv[])
     // SelectSort(array, SIZE); 
     // InsertSort(array, SIZE); 
     // InsertSort2(array, SIZE); 
-    // ShellSort(array, SIZE, [](int a, int b)->bool{return a < b;}); 
+    ShellSort(array, SIZE, [](int a, int b)->bool{return a < b;}); 
     // ShellSort2(array, SIZE, [](int a, int b)->bool{return a < b;}); 
-    QuickSort(array, 0, SIZE - 1, [](int a, int b)->int{return a - b;});
+    // QuickSort(array, 0, SIZE - 1, [](int a, int b)->int{return a - b;});
     // QuickSort(array, SIZE, [](int a, int b)->int{return a - b;});
     // QuickSort2(array, 0, SIZE - 1, [](int a, int b)->bool{return a < b;});
     // MergeSort(array, SIZE);

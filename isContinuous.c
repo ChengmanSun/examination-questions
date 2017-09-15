@@ -7,7 +7,7 @@
 *  @FileName       : isContinuous.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/07/13 11:13:50
-*  @Last Modified  : 2017/08/13 17:07:27
+*  @Last Modified  : 2017/09/15 14:16:39
 ********************************************************************************
 */
 
@@ -30,7 +30,7 @@ int isContinuous(int array[], int length)
         return 0;
     qsort(array, sizeof(int), length, compare);
     int KingCount = 0;
-    for(int i; i < length && array[i] == 0; ++i)
+    for(int i = 0; i < length && array[i] == 0; ++i)
         ++KingCount;
     
     int totalGap = 0;

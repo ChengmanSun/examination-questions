@@ -7,7 +7,7 @@
 *  @FileName       : memcpy.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/09/06 17:52:08
-*  @Last Modified  : 2017/09/07 23:49:58
+*  @Last Modified  : 2017/09/09 17:13:38
 ********************************************************************************
 */
 
@@ -54,7 +54,11 @@ int main(int argc, char *argv[])
 {
     char s1[100] = "abcdefghigk";
     char *s2 = s1+5;
-    printf("%s\n", my_memcpy(s2, s1, strlen(s1) + 1));
+    void *ret = my_memcpy(s2, s1, strlen(s1) + 1);
+    if(ret)
+        printf("%s\n", ret);
+    else
+        printf("内存复制失败\n");
     printf("s1: %s\n", s1);
     printf("s2: %s\n", s2);
     return 0;
