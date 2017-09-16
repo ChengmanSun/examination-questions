@@ -7,7 +7,7 @@
 *  @FileName       : tree.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/21 12:59:10
-*  @Last Modified  : 2017/09/01 16:43:28
+*  @Last Modified  : 2017/09/16 10:50:56
 ********************************************************************************
 */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <deque>
 #include <vector>
+#include <list>
 #include <stack>
 #include <map>
 
@@ -434,6 +435,45 @@ TreeNode *_commonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
     return p;
 }
 
+//给定一棵普通二叉树的两个节点，求它们的最小公共祖先。方法二
+bool findNodePath(TreeNode *root, TreeNode *node, std::list<TreeNode *> &path)
+{
+    if(root == NULL) return false;
+    path.push_back(root);
+    if(root == node) return true;
+    bool result = findNodePath(root->left, node, path);
+    if(result == true)
+        return true;
+    result = findNodePath(root->right, node, path);
+    if(result == true)
+        return true;
+    path.pop_back();
+    return false;
+}
+
+TreeNode *commonParent(TreeNode *root, TreeNode *p, TreeNode *q)
+{
+    if(root == NULL || p == NULL || q == NULL)
+        return NULL;
+    std::list<TreeNode *> path1;
+    std::list<TreeNode *> path2;
+    findNodePath(root, p, path1);
+    findNodePath(root, q, path2);
+    if(path1.empty() || path2.empty()) //如果p或者q不在树中
+        return NULL;
+    std::list<TreeNode *>::iterator itr1 = path1.begin();
+    std::list<TreeNode *>::iterator itr2 = path2.begin();
+    TreeNode *lastNode = NULL;
+    while(itr1 != path1.end() && itr2 != path2.end())
+    {
+        if(*itr1 == *itr2)
+            lastNode = *itr1;
+        ++itr1;
+        ++itr2;
+    }
+    return lastNode;
+}
+
 //------------------------------------------------------------------------------
 
 //给出二叉树的前序遍历和中序遍历，请重建二叉树
@@ -579,6 +619,7 @@ int main(int argc, char *argv[])
     TreeNode *q = p->right;
     p = p->left;
     TreeNode *forefather = _commonAncestor(root, p, q);
-    printf("%d\n", forefather->data);
+    TreeNode *forefather2 = commonParent(root, p, q);
+    printf("%d %d\n", forefather->data, forefather2->data);
     return 0;
 }
