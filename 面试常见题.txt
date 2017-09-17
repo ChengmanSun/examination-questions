@@ -671,7 +671,7 @@ int *p = a;
 
 题：请写一个函数求本地字节序
 答：typedef enum{big_endian, little_endian} ENDIAN;
-ENDIAN localEndian(void)
+inline ENDIAN localEndian(void)
 {
     int i = 1;
     return *(char *)&i == 1 ? little_endian : big_endian;

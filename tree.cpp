@@ -7,7 +7,7 @@
 *  @FileName       : tree.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/21 12:59:10
-*  @Last Modified  : 2017/09/16 10:50:56
+*  @Last Modified  : 2017/09/16 10:59:30
 ********************************************************************************
 */
 
@@ -442,11 +442,9 @@ bool findNodePath(TreeNode *root, TreeNode *node, std::list<TreeNode *> &path)
     path.push_back(root);
     if(root == node) return true;
     bool result = findNodePath(root->left, node, path);
-    if(result == true)
-        return true;
+    if(result == true) return true;
     result = findNodePath(root->right, node, path);
-    if(result == true)
-        return true;
+    if(result == true) return true;
     path.pop_back();
     return false;
 }
