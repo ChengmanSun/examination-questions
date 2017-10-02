@@ -7,7 +7,7 @@
 *  @FileName       : tree.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/21 12:59:10
-*  @Last Modified  : 2017/09/16 10:59:30
+*  @Last Modified  : 2017/10/02 16:30:01
 ********************************************************************************
 */
 
@@ -200,6 +200,20 @@ int treeDeepth(TreeNode *root)
     int left = treeDeepth(root->left);
     int right = treeDeepth(root->right);
     return left > right ? left + 1 : right + 1;
+}
+
+//------------------------------------------------------------------------------
+
+//求二叉树的最大路径，也就是最远的两个节点的距离
+int treeMaxPath(TreeNode *root)
+{
+    if(root == NULL) return -1;
+    int leftDeepth = treeDeepth(root);      //左子树深度
+    int rightDeepth = treeDeepth(root);     //右子树深度
+    int maxPath = 0;
+    maxPath = leftDeepth > 0 ? leftDeepth + 1 : 0;
+    maxPath += rightDeepth > 0 ? rightDeepth + 1 : 0;
+    return maxPath;
 }
 
 //------------------------------------------------------------------------------
