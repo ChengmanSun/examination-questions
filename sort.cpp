@@ -7,7 +7,7 @@
 *  @FileName       : sort.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/16 16:00:12
-*  @Last Modified  : 2017/09/15 14:59:33
+*  @Last Modified  : 2017/10/07 15:15:30
 ********************************************************************************
 */
 
@@ -25,13 +25,11 @@
 
 void BubbleSort(int a[], int n)
 {
-    if(a == NULL || n < 2)
-        return;
-
+    if(a == NULL || n < 2) return;
     int isSorted = true;
     for(int i = 0; i < n - 1; ++i)
     {
-        for(int j = 0; j < n - 1 - i; ++j)
+        for(int j = 0; j < n - i - 1; ++j)
         {
             if(a[j] > a[j+1])
             {
@@ -41,8 +39,7 @@ void BubbleSort(int a[], int n)
                 a[j+1] = temp;
             }
         }
-        if(isSorted)
-            break;
+        if(isSorted) break;
     }
 }
 
@@ -50,9 +47,7 @@ void BubbleSort(int a[], int n)
 
 void SelectSort(int a[], int n)
 {
-    if(a == NULL || n < 2)
-        return;
-
+    if(a == NULL || n < 2) return;
     for(int i = 0; i < n - 1; ++i)
     {
         int min = i;
@@ -279,8 +274,8 @@ void QuickSort2(int a[], int low, int high, bool (*compare)(int, int))
 static void HeapAdjust(int heap[], int length, int i)
 {
     //j指向左叶子结点
-    int j = 2*i + 1;
     int temp = heap[i];
+    int j = 2*i + 1;
     while(j < length)
     {
         //如果存在右叶子结点，且右叶子结点较大，则j指向右叶子结点
@@ -376,17 +371,17 @@ void HeapSort(int a[], int n)
  */
 
 //并归排序递归实现
-static void Merge(int data[], int copy[], int start, int end)
+static void Merge(int data[], int copy[], int low, int high)
 {
-    if(start >= end)
+    if(low >= high)
         return;
-    // int middle = (start + end) / 2;
-    int middle = start + (end - start) / 2;
-    Merge(copy, data, start, middle);
-    Merge(copy, data, middle + 1, end);
-    int i = start, j = middle + 1;
-    int copyIndex = start;
-    while(i <= middle && j <= end)
+    // int middle = (low + high) / 2;
+    int middle = low + (high - low) / 2;
+    Merge(copy, data, low, middle);
+    Merge(copy, data, middle + 1, high);
+    int i = low, j = middle + 1;
+    int copyIndex = low;
+    while(i <= middle && j <= high)
     {
         if(data[i] < data[j])
             copy[copyIndex++] = data[i++];
@@ -395,19 +390,19 @@ static void Merge(int data[], int copy[], int start, int end)
     }
     while(i <= middle)
         copy[copyIndex++] = data[i++];
-    while(j <= end)
+    while(j <= high)
         copy[copyIndex++] = data[j++];
 }
 
-void MergeSort(int a[], int n)
+void MergeSort(int data[], int len)
 {
-    if(a == NULL || n < 2)
+    if(data == NULL || len < 2)
         return;
-    int *copy = (int *)malloc(sizeof(int) * n);
-    //递归到最后第一次返回时并不确定是从a数组并归到copy数组，或者从copy数组并归到a数组。
+    int *copy = (int *)malloc(sizeof(int) * len);
+    //递归到最后第一次返回时并不确定是从data数组并归到copy数组，或者从copy数组并归到data数组。
     //所以刚开始需要使两个数组有相同的数据。
-    memcpy(copy, a, sizeof(int) * n);
-    Merge(copy, a, 0, n - 1);
+    memcpy(copy, data, sizeof(int) * len);
+    Merge(copy, data, 0, len - 1);
     free(copy);
 }
 
