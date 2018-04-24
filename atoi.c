@@ -7,7 +7,7 @@
 *  @FileName       : atoi.c
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/17 00:14:09
-*  @Last Modified  : 2017/06/05 23:26:38
+*  @Last Modified  : 2017/10/11 23:59:47
 ********************************************************************************
 */
 
@@ -17,7 +17,7 @@
 int atoi(const char *str)
 {
     char c;
-    int i = 0;
+    int value = 0;
     int sign = 1; //if '-' then negative, otherwise positive.
 
     if(str == NULL)
@@ -31,9 +31,9 @@ int atoi(const char *str)
         ++str;
     while(isdigit(c = *str++))
     {
-        i = i*10 + (c - '0');
+        value = value*10 + (c - '0');
     }
-    return sign * i;
+    return sign * value;
 }
 
 int main(int argc, char *argv[])

@@ -7,11 +7,13 @@
 *  @FileName       : cast.cpp
 *  @Author         : scm 351721714@qq.com
 *  @Create         : 2017/05/31 09:00:29
-*  @Last Modified  : 2017/05/31 16:32:34
+*  @Last Modified  : 2017/10/12 00:25:54
 ********************************************************************************
 */
 
 #include <stdio.h>
+
+//const_cast<T *>(ptr) 的作用是移除const属性。
 
 class A {
 public:
@@ -61,7 +63,7 @@ int main(int argc, char *argv[])
     if(pb != NULL)
         printf("%c\n", pb->m_b);
 
-    //dynamic_cast<C*>(pb)不能正常编译，说明dynamic_cast从基类转到派生类需要基类有虚函数。
+    //dynamic_cast<C*>(pb)不能正常编译，说明dynamic_cast从基类转到派生类需要基类有虚函数(多态)。
     // printf("%c\n", dynamic_cast<C*>(pb)->m_a);
     // printf("%c\n", dynamic_cast<C*>(pb)->m_b);
     //static_cast不管是从派生类到基类，或者从基类到派生类的转换，都不需要有虚函数(多态)。
@@ -70,8 +72,8 @@ int main(int argc, char *argv[])
 
     printf("----------------------------------\n");
 
-    //以下语句的结果是输出两个a，说明reinterpret_cast的转换结果保持二进制完全一致，不能
-    //正确地转基类和派生类。
+    //以下语句的结果是输出两个a，说明reinterpret_cast的转换结果保持二进制完全一致，
+    //不能正确地转基类和派生类。
     printf("%c %c\n", reinterpret_cast<A*>(pc)->m_a, reinterpret_cast<B*>(pc)->m_b);
 
     delete pc;
